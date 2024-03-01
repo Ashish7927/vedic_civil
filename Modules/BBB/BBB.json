@@ -1,0 +1,19 @@
+{
+    "BBB": {
+        "item_id": "31121832",
+        "migration": [
+            "2020_11_24_123643_create_bbb_settings_table.php",
+            "2020_11_24_123936_create_bbb_meetings_table.php",
+            "2020_11_24_124009_create_bbb_meeting_users_table.php"
+        ],
+        "versions": [
+            "1.1.0"
+        ],
+        "url": [
+            "https://spondonit.com/contact"
+        ],
+        "notes": [
+            "This is BigBlueButton module for live virtual class and meeting in this system at a time. Thanks for using."
+        ]
+    }
+}

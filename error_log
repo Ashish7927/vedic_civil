@@ -1,0 +1,7 @@
+[23-Jan-2022 08:22:34 Asia/Kuala_Lumpur] PHP Fatal error:  Uncaught Symfony\Component\Routing\Exception\RouteNotFoundException: Route [register] not defined. in /home/quadcube/public_html/docsafe.ai/vendor/laravel/framework/src/Illuminate/Routing/UrlGenerator.php:444
+Stack trace:
+#0 /home/quadcube/public_html/docsafe.ai/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php(739): Illuminate\Routing\UrlGenerator->route('register', Array, true)
+#1 /home/quadcube/public_html/docsafe.ai/storage/framework/views/bd686753f801199dabfabb570183eb9784d012bc.php(230): route('register')
+#2 /home/quadcube/public_html/docsafe.ai/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(107): require('/home/quadcube/...')
+#3 /home/quadcube/public_html/docsafe.ai/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(108): Illuminate\Filesystem\Filesystem::Illuminate\Filesystem\{closure}()
+#4 /home/quadcube/public_html/docsafe.ai/vendor/laravel/framework/src/Illuminate/View/Engines/PhpEngine.php(58): Illuminate\Filesystem\Filesystem->getRequire('/home/quadc in /home/quadcube/public_html/docsafe.ai/vendor/laravel/framework/src/Illuminate/Routing/UrlGenerator.php on line 444

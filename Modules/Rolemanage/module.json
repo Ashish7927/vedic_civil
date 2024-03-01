@@ -1,0 +1,13 @@
+{
+    "name": "Rolemanage",
+    "alias": "rolemanage",
+    "description": "",
+    "keywords": [],
+    "order": 0,
+    "providers": [
+        "Modules\\Rolemanage\\Providers\\RolemanageServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

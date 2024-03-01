@@ -1,0 +1,14 @@
+{
+    "AmazonS3": {
+        "item_id": "31121775",
+        "versions": [
+            "1.0.2"
+        ],
+        "url": [
+            "https://spondonit.com/contact"
+        ],
+        "notes": [
+            "This is Amazon S3 module for AWS Cloud Storage. Thanks for using."
+        ]
+    }
+}

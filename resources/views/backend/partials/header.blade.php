@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html dir="{{ isRtl() ? 'rtl' : '' }}" class="{{ isRtl() ? 'rtl' : '' }}">
+<html>
 
 <head>
     <meta charset="utf-8" />
@@ -57,14 +57,12 @@
         const LANG = "{{ app()->getLocale() }}";
     </script>
 
-    @livewireStyles
 
 
 </head>
 
 <body class="admin">
     @include('preloader')
-    <input type="hidden" name="demoMode" id="demoMode" value="{{ appMode() }}">
     <input type="hidden" name="url" id="url" value="{{ URL::to('/') }}">
     <input type="hidden" name="table_name" id="table_name" value="@yield('table')">
     <input type="hidden" name="csrf_token" class="csrf_token" value="{{ csrf_token() }}">

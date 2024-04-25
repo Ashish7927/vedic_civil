@@ -420,7 +420,6 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::post('profile-settings', 'UserController@UpdatePassword')->name('updatePassword');
     Route::post('profile-update', 'UserController@update_user')->name('update_user');
     Route::post('profile-partner-update/{id}', 'UserController@update_partner_user')->name('update_partner_user');
-    Route::get('profile-settings', 'UserController@changePassword')->name('changePassword');
 });
 //Route::post('get-user-by-role', 'UserController@getUsersByRole')->name('getUsersByRole')->middleware('auth');
 

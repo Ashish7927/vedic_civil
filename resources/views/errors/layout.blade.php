@@ -1,5 +1,5 @@
-@include(theme('partials._header'))
-@include(theme('partials._menu'))
+{{-- @include(theme('partials._header')) --}}
+{{-- @include(theme('partials._menu')) --}}
 
 
 <div class="error_wrapper">
@@ -21,4 +21,4 @@
 </div>
 
 @yield('mainContent')
-@include(theme('partials._footer'))
+{{-- @include(theme('partials._footer')) --}}

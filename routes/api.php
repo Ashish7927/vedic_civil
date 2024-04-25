@@ -19,6 +19,7 @@ Route::group([
 ], function () {
     Route::post('login', 'AuthController@login');
     Route::post('signup', 'AuthController@signup');
+    Route::post('verify-otp', 'AuthController@verifyOtp');
     Route::post('set-fcm-token', 'AuthController@setFcmToken');
     Route::post('courses/oauth/token', 'AuthController@setCoursesOauthToken');
 

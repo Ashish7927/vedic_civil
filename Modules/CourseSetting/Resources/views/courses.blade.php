@@ -66,17 +66,6 @@
                                     </select>
                                 </div>
 
-                                @if (!check_whether_cp_or_not() && !isPartner())
-                                    <div class="col-lg-3 mt-30">
-                                        <label class="primary_input_label"
-                                            for="instructor">{{ __('courses.Trainer') }}</label>
-                                        <select class="select2" name="instructor" id="instructor">
-                                            <option data-display="{{ __('common.Select') }} {{ __('courses.Trainer') }}"
-                                                value="">{{ __('common.Select') }} {{ __('courses.Trainer') }}
-                                            </option>
-                                        </select>
-                                    </div>
-                                @endif
 
                                 <div class="col-lg-3 mt-30 d-none">
                                     <label class="primary_input_label" for="course">{{ __('courses.Statistics') }}</label>
@@ -167,20 +156,6 @@
                                     </div>
                                 @endif
 
-                                @if (isAdmin() || isHRDCorp() || isCourseReviewer() || isMyLL())
-                                    <div class="col-lg-3 mt-30">
-                                        <label class="primary_input_label" for="content_provider">Content Provider</label>
-                                        <select class="primary_select" name="content_provider" id="content_provider">
-                                            <option data-display="{{ __('common.Select') }}" value=""> {{ __('common.Select') }}</option>
-
-                                            @if (isset($cps))
-                                                @foreach ($cps as $cp)
-                                                    <option value="{{ $cp->id }}">{{ $cp->name }}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                    </div>
-                                @endif
 
                                 @if (Route::current()->getName() == 'getPendingCourse')
                                     <div class="col-lg-3 mt-30">
@@ -244,7 +219,6 @@
                                             <th scope="col"> {{ __('common.SL') }}</th>
                                             <th scope="col">{{ __('courses.Course') }} {{ __('coupons.Title') }}</th>
                                             <th scope="col">{{ __('courses.Category') }}</th>
-                                            <th scope="col">{{ __('courses.Trainer') }}</th>
                                             <th scope="col">{{ __('common.Status') }}</th>
                                             <th scope="col">{{ __('courses.Lesson') }}</th>
 
@@ -507,9 +481,9 @@
                                                     <select class="primary_select vimeoVideo" name="vimeo" id="viemoEditCourse">
                                                         <option data-display="{{ __('common.Select') }} {{ __('courses.Video') }}" value="">{{ __('common.Select') }} {{ __('courses.Video') }} </option>
 
-                                                        @foreach ($video_list as $video)
+                                                        {{-- @foreach ($video_list as $video)
                                                             <option value="{{ @$video['uri'] }}">{{ @$video['name'] }} </option>
-                                                        @endforeach
+                                                        @endforeach --}}
                                                     </select>
 
                                                     @if ($errors->has('vimeo'))
@@ -667,7 +641,6 @@
         </div>
     </div>
 
-    @include(theme('partials.course_assign_to_learners'))
 @endsection
 
 @push('scripts')

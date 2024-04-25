@@ -104,7 +104,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="col-xl-12">
+                                                <div class="col-xl-12" style="display: none">
                                                     <div class="primary_input mb-25">
                                                         <label class="primary_input_label"
                                                                for="position_order">{{ __('courses.Position Order') }}</label>

@@ -18,7 +18,7 @@ use Modules\BundleSubscription\Entities\BundleCoursePlan;
 use Modules\Org\Entities\OrgBranch;
 use Modules\Org\Entities\OrgMaterial;
 use Modules\Quiz\Entities\OnlineExamQuestionAssign;
-use Vimeo\Vimeo;
+// use Vimeo\Vimeo;
 use Yajra\DataTables\DataTables;
 use Modules\Payment\Entities\Cart;
 use App\Http\Controllers\Controller;
@@ -543,7 +543,7 @@ class CourseSettingController extends Controller
         try {
             $user = Auth::user();
 
-            $video_list = $this->getVimeoList();
+            // $video_list = $this->getVimeoList();
             $vdocipher_list = $this->getVdoCipherList();
 
             $courses = [];
@@ -568,7 +568,7 @@ class CourseSettingController extends Controller
 
             $durations = Course::get();
 
-            return view('coursesetting::courses', compact('sub_lists', 'levels', 'video_list', 'vdocipher_list', 'title', 'quizzes', 'courses', 'categories', 'languages', 'instructors', 'cps', 'durations'));
+            return view('coursesetting::courses', compact('sub_lists', 'levels', 'vdocipher_list', 'title', 'quizzes', 'courses', 'categories', 'languages', 'instructors', 'cps', 'durations'));
         } catch (Exception $e) {
             GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
         }
@@ -666,21 +666,14 @@ class CourseSettingController extends Controller
 
         if ($request->status_code == 1) {
             $rules = [
-                // 'type' => 'required',
                 'language' => 'required',
                 'title' => 'required',
                 'duration' => 'required',
-                'outcomes' => 'required',
                 'image' => 'required|mimes:jpeg,bmp,png,jpg|max:5120',
-                'requirements' => 'required',
                 'about' => 'required'
 
             ];
-            // if(auth()->user()->role_id == 7){
-            //$rules['declaration'] = 'required';
             $rules['course_type'] = 'required|not_in:0';
-            $rules['trainer'] = 'required';
-            // }
         }
 
         $messages = [
@@ -688,8 +681,7 @@ class CourseSettingController extends Controller
             'image.max' => 'The maximum file size of course thumbnail is 5MB.',
             'image.mimes' => 'Course thumbnail file format is not correct',
             'course_type.not_in' => 'The course type field is required.',
-            'about.required' => 'The course description is required',
-            'requirements.required' => 'The course requirements is required'
+            'about.required' => 'The course description is required'
         ];
 
         // $validation = $this->validate($request, $rules, $messages);
@@ -714,33 +706,10 @@ class CourseSettingController extends Controller
             if (demoCheck()) {
                 return redirect()->back();
             }
-            //  $rules = [
-            //      'type' => 'required',
-            //      'language' => 'required',
-            //      'title' => 'required',
-            //        'duration' => 'required',
-            //      'outcomes' => 'required',
-            //        'image' => 'required|mimes:jpeg,bmp,png,jpg|max:1024',
-
-            //  ];
-            //  $messages = [
-            //        'required' => 'The :attribute field is required.',
-            //        'image.max' => 'The maximum file size is 1MB.',
-            //        'image.mimes' => 'The file format is not correct',
-            //        'course_type.not_in' => 'The course type field is required.',
-            //    ];
-            //    // if(auth()->user()->role_id == 7){
-            //    $rules['declaration'] = 'required';
-            //    $rules['course_type'] = 'required|not_in:0';
-            //    $rules['trainer'] = 'required';
-            //    // }
-
-            //    $this->validate($request, $rules, $messages);
 
             if ($request->type == 1) {
                 $rules = [
                     'level' => 'required',
-                    // 'host' => 'required',
                 ];
                 $this->validate($request, $rules, validationMessage($rules));
 
@@ -751,22 +720,11 @@ class CourseSettingController extends Controller
                     ];
                     $this->validate($request, $rules, validationMessage($rules));
 
-                    if ($request->get('host') == "Vimeo") {
-                        $rules = [
-                            'vimeo' => 'required',
-                        ];
-                        $this->validate($request, $rules, validationMessage($rules));
-                    } elseif ($request->get('host') == "VdoCipher") {
+                    if ($request->get('host') == "VdoCipher") {
                         $rules = [
                             'vdocipher' => 'required',
                         ];
                         $this->validate($request, $rules, validationMessage($rules));
-                    } elseif ($request->get('host') == "Youtube") {
-                        $rules = [
-                            'trailer_link' => 'required'
-                        ];
-                        $this->validate($request, $rules, validationMessage($rules));
-                    } else {
                     }
                 }
             }
@@ -838,7 +796,6 @@ class CourseSettingController extends Controller
                     $course->title = $request->title;
                     $course->slug = null;
                     $course->duration = $request->duration;
-                    // $course->feature = $request->feature;
 
 
                     if ($request->is_discount == 1) {
@@ -874,21 +831,8 @@ class CourseSettingController extends Controller
                         $course->user_id = $request->assign_instructor;
                     }
 
-                    if ($request->get('host') == "Vimeo") {
-                        if (config('vimeo.connections.main.upload_type') == "Direct") {
-                            $course->trailer_link = $this->uploadFileIntoVimeo($request->title, $request->vimeo);
-                        } else {
-                            $course->trailer_link = $request->vimeo;
-                        }
-                    } elseif ($request->get('host') == "VdoCipher") {
+                    if ($request->get('host') == "VdoCipher") {
                         $course->trailer_link = $request->vdocipher;
-                    } elseif ($request->get('host') == "Youtube") {
-                        $course->trailer_link = $request->trailer_link;
-                    } elseif ($request->get('host') == "Self") {
-                        $course->trailer_link = $this->getPublicPathFromServerId($request->get('file'), 'local');
-                    } elseif ($request->get('host') == "AmazonS3") {
-
-                        $course->trailer_link = $this->getPublicPathFromServerId($request->get('file'), 's3');
                     } else {
                         $course->trailer_link = null;
                     }
@@ -933,20 +877,8 @@ class CourseSettingController extends Controller
 
                 $getCourseAfterSave = Course::withoutGlobalScope('withoutsubscription')->latest()->first();
 
-                if ($request->type == 1 && (check_whether_cp_or_not() || isPartner())) {
-                    $micro_group_users = UserGroup::whereHas('group', function ($query) {
-                        return $query->where('course_type', 1);
-                    })->get();
-                    $nonmicro_group_users = UserGroup::whereHas('group', function ($query) {
-                        return $query->where('course_type', '!=', 1);
-                    })->get();
-
-                    $type_of_mail = 2;
-                    new_course_type_users($type_of_mail, $request, $micro_group_users, $nonmicro_group_users);
-                }
-
                 Toastr::success('Course has been submitted', trans('common.Success'));
-                //return redirect()->to(route('getAllCourse'));
+
                 return redirect()->to(route('courseDetails', [$getCourseAfterSave->id]) . '?type=courseDetails');
             } catch (Exception $e) {
                 GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
@@ -1040,7 +972,6 @@ class CourseSettingController extends Controller
                 $course->title = $request->title;
                 $course->slug = null;
                 $course->duration = $request->duration;
-                // $course->feature = $request->feature;
 
 
                 if ($request->is_discount == 1) {
@@ -1076,21 +1007,8 @@ class CourseSettingController extends Controller
                     $course->user_id = $request->assign_instructor;
                 }
 
-                if ($request->get('host') == "Vimeo") {
-                    if (config('vimeo.connections.main.upload_type') == "Direct") {
-                        $course->trailer_link = $this->uploadFileIntoVimeo($request->title, $request->vimeo);
-                    } else {
-                        $course->trailer_link = $request->vimeo;
-                    }
-                } elseif ($request->get('host') == "VdoCipher") {
+                if ($request->get('host') == "VdoCipher") {
                     $course->trailer_link = $request->vdocipher;
-                } elseif ($request->get('host') == "Youtube") {
-                    $course->trailer_link = $request->trailer_link;
-                } elseif ($request->get('host') == "Self") {
-                    $course->trailer_link = $this->getPublicPathFromServerId($request->get('file'), 'local');
-                } elseif ($request->get('host') == "AmazonS3") {
-
-                    $course->trailer_link = $this->getPublicPathFromServerId($request->get('file'), 's3');
                 } else {
                     $course->trailer_link = null;
                 }
@@ -1135,18 +1053,6 @@ class CourseSettingController extends Controller
 
                 $getCourseAfterSave = Course::withoutGlobalScope('withoutsubscription')->latest()->first();
 
-                if ($request->type == 1 && (check_whether_cp_or_not())) {
-
-                    $micro_group_users = UserGroup::whereHas('group', function ($query) {
-                        return $query->where('course_type', 1);
-                    })->get();
-                    $nonmicro_group_users = UserGroup::whereHas('group', function ($query) {
-                        return $query->where('course_type', '!=', 1);
-                    })->get();
-
-                    $type_of_mail = 2;
-                    new_course_type_users($type_of_mail, $request, $micro_group_users, $nonmicro_group_users);
-                }
 
                 Toastr::success(trans('common.Operation successful'), trans('common.Success'));
                 return redirect()->to(route('courseDetails', [$getCourseAfterSave->id]) . '?type=courseDetails');
@@ -1239,51 +1145,18 @@ class CourseSettingController extends Controller
             Session::flash('type', 'courseDetails');
 
 
-            //  $rules = [
-            //      'type' => 'required',
-            //      'language' => 'required',
-            //      'title' => 'required',
-            //      'outcomes' => 'required',
-            //      'image' => 'nullable|mimes:jpeg,bmp,png,jpg|max:1024',
-            //  ];
-            //  $messages = [
-            //      'required' => 'The :attribute field is required.',
-            //      'image.max' => 'The maximum file size is 1MB.',
-            //      'image.mimes' => 'The file format is not correct',
-            //      'course_type.not_in' => 'The course type field is required.',
-            //  ];
-            //  // if(auth()->user()->role_id == 7){
-            //  $rules['course_type'] = 'required|not_in:0';
-            //  $rules['trainer'] = 'required';
-            //  // }
-
-
-            // $this->validate($request, $rules, $messages);
-
-
             if ($request->type == 1) {
                 $rules = [
                     'duration' => 'required',
-                    'level' => 'required',
-                    // 'host' => 'required',
+                    'level' => 'required'
                 ];
                 $this->validate($request, $rules, validationMessage($rules));
 
                 if (isset($request->show_overview_media)) {
 
-                    if ($request->get('host') == "Vimeo") {
-                        $rules = [
-                            'vimeo' => 'required',
-                        ];
-                        $this->validate($request, $rules, validationMessage($rules));
-                    } elseif ($request->get('host') == "VdoCipher") {
+                    if ($request->get('host') == "VdoCipher") {
                         $rules = [
                             'vdocipher' => 'required',
-                        ];
-                        $this->validate($request, $rules, validationMessage($rules));
-                    } elseif ($request->get('host') == "Youtube") {
-                        $rules = [
-                            'trailer_link' => 'required'
                         ];
                         $this->validate($request, $rules, validationMessage($rules));
                     } else {
@@ -1339,21 +1212,15 @@ class CourseSettingController extends Controller
                     }
                 }
 
-                // $course->user_id = Auth::id();
 
                 if (!empty($request->assign_instructor)) {
                     $course->user_id = $request->assign_instructor;
                 }
-                // if (!empty($request->assign_reviewer)) {
-                //     $course->reviewer_id = $request->assign_reviewer;
-                //     $course->assigner_id = auth()->user()->id;
-                // }
                 $course->drip = $request->drip;
                 $course->complete_order = $request->complete_order;
                 $course->lang_id = $request->language;
                 $course->title = $request->title;
                 $course->duration = $request->duration;
-                // $course->feature = $request->feature;
                 $course->subscription_list = $request->subscription_list;
 
 
@@ -1390,25 +1257,8 @@ class CourseSettingController extends Controller
                 $course->mode_of_delivery = $request->mode_of_delivery;
 
                 $course->show_overview_media = $request->show_overview_media ? 1 : 0;
-                if ($request->get('host') == "Vimeo") {
-                    if (config('vimeo.connections.main.upload_type') == "Direct") {
-                        $course->trailer_link = $this->uploadFileIntoVimeo($request->title, $request->vimeo);
-                    } else {
-                        $course->trailer_link = $request->vimeo;
-                    }
-                } elseif ($request->get('host') == "VdoCipher") {
+                if ($request->get('host') == "VdoCipher") {
                     $course->trailer_link = $request->vdocipher;
-                } elseif ($request->get('host') == "Youtube") {
-                    $course->trailer_link = $request->trailer_link;
-                } elseif ($request->get('host') == "Self") {
-                    if ($request->get('file')) {
-                        $course->trailer_link = $this->getPublicPathFromServerId($request->get('file'), 'local');
-                    }
-                } elseif ($request->get('host') == "AmazonS3") {
-                    if ($request->get('file')) {
-
-                        $course->trailer_link = $this->getPublicPathFromServerId($request->get('file'), 's3');
-                    }
                 } else {
                     $course->trailer_link = null;
                 }
@@ -1448,16 +1298,6 @@ class CourseSettingController extends Controller
                     $course->trainer = $request->trainer;
                 }
 
-                // if(isset($request->declaration)){
-                //     if($request->declaration == 'on')
-                //         $course->declaration = 1; //Yes
-                //     else
-                //         $course->declaration = 0; //No
-                // }
-                // else {
-                //     $course->declaration = 0; //No
-                // }
-
 
                 if (Settings('frontend_active_theme') == "edume") {
                     $course->what_learn1 = $request->what_learn1;
@@ -1491,9 +1331,6 @@ class CourseSettingController extends Controller
                     $course->status = 0;
                 }
 
-                if (check_whether_cp_or_not() || isPartner()) {
-                    $course->status = 0;
-                }
 
                 $course->save();
                 $course->updated_at = now();
@@ -1501,39 +1338,7 @@ class CourseSettingController extends Controller
                 $course->detail_tab = 1;
                 $course->save();
 
-                if ($request->type == 1 && isPartner()) {
-
-                    $micro_group_users = UserGroup::whereHas('group', function ($query) {
-                        return $query->where('course_type', 1);
-                    })->get();
-                    $nonmicro_group_users = UserGroup::whereHas('group', function ($query) {
-                        return $query->where('course_type', '!=', 1);
-                    })->get();
-
-                    // $users = User::whereHas('role', function ($query) {
-                    //     return $query->where('name', 'PIC');
-                    // })->get();
-
-                    $type_of_mail = 2;
-                    new_course_type_users($type_of_mail, $request, $micro_group_users, $nonmicro_group_users);
-                }
-
-                // if (isPIC()) {
-                //     $course = Course::find($request->id);
-                //     if ($course) {
-                //         $reviewer_id = $course->reviewer_id;
-                //         $reviewer = User::find($reviewer_id);
-                //         $user_id = $course->user_id;
-                //         $user = User::find($user_id);
-                //         if ($reviewer) {
-                //             $type_of_mail = 2;
-                //             course_send_email($type_of_mail, 'assign_course', $request, $reviewer, $user);
-                //         }
-                //     }
-                // }
-
                 if ((isAdmin() || isHRDCorp() || isMyLL() && $course->status == 1) || (check_whether_cp_or_not() || isPartner() && $course->status == 0 && $request->update_course_status == 1)){
-                    //if ($course->status == 1) {
                         $type = '';
                         if (!(Session::get('typeCourse'))) {
                             if ($_GET['typeUpdateCourse'] == 'courseDetails') {
@@ -1567,7 +1372,6 @@ class CourseSettingController extends Controller
                         }
 
                         return redirect()->back();
-                    //}
 
                 }
 
@@ -1690,25 +1494,8 @@ class CourseSettingController extends Controller
                 $course->mode_of_delivery = $request->mode_of_delivery;
 
                 $course->show_overview_media = $request->show_overview_media ? 1 : 0;
-                if ($request->get('host') == "Vimeo") {
-                    if (config('vimeo.connections.main.upload_type') == "Direct") {
-                        $course->trailer_link = $this->uploadFileIntoVimeo($request->title, $request->vimeo);
-                    } else {
-                        $course->trailer_link = $request->vimeo;
-                    }
-                } elseif ($request->get('host') == "VdoCipher") {
+                if ($request->get('host') == "VdoCipher") {
                     $course->trailer_link = $request->vdocipher;
-                } elseif ($request->get('host') == "Youtube") {
-                    $course->trailer_link = $request->trailer_link;
-                } elseif ($request->get('host') == "Self") {
-                    if ($request->get('file')) {
-                        $course->trailer_link = $this->getPublicPathFromServerId($request->get('file'), 'local');
-                    }
-                } elseif ($request->get('host') == "AmazonS3") {
-                    if ($request->get('file')) {
-
-                        $course->trailer_link = $this->getPublicPathFromServerId($request->get('file'), 's3');
-                    }
                 } else {
                     $course->trailer_link = null;
                 }
@@ -1748,15 +1535,6 @@ class CourseSettingController extends Controller
                     $course->trainer = $request->trainer;
                 }
 
-                // if(isset($request->declaration)){
-                //     if($request->declaration == 'on')
-                //         $course->declaration = 1; //Yes
-                //     else
-                //         $course->declaration = 0; //No
-                // }
-                // else {
-                //     $course->declaration = 0; //No
-                // }
 
 
                 if (Settings('frontend_active_theme') == "edume") {
@@ -2164,14 +1942,9 @@ class CourseSettingController extends Controller
             }
         }
 
-        // if ($quizzes->count() > 0) {
-        //     $course->curriculum_tab = 1;
-        // }
 
         $chapters = Chapter::where('course_id', $id)->orderBy('position', 'asc')->with('lessons')->get();
-        // if ($chapters->count() > 0) {
-        //     $course->curriculum_tab = 1;
-        // }
+
         if ($chapters->count() > 0 || $quizzes->count() > 0) {
             $course->curriculum_tab = 1;
         } else {
@@ -2194,11 +1967,7 @@ class CourseSettingController extends Controller
 
 
         $levels = CourseLevel::where('status', 1)->get();
-        // if (Auth::user()->role_id == 1) {
-        //     $certificates = Certificate::latest()->get();
-        // } else {
-        //     $certificates = Certificate::where('created_by', Auth::user()->id)->latest()->get();
-        // }
+
         if ($course->price == 0 && $course->discount_price == null) {
             $certificates = Certificate::where('is_free', 1)->latest()->get();
 
@@ -2376,7 +2145,6 @@ class CourseSettingController extends Controller
     {
         $query = Course::withoutGlobalScope('withoutsubscription')->whereIn('type', [1, 2])->with('category', 'quiz', 'user');
         if (isCourseReviewer()) {
-            //$query->whereIn('status', [0, 1]);
             $query->whereIn('status', [0, 1, 3, 4]);
         }
         if (check_whether_cp_or_not() || isPartner()) {
@@ -2396,9 +2164,7 @@ class CourseSettingController extends Controller
             }
         }
 
-        // if ($request->category != "") {
-        //     $query->where('category_id', $request->category)->orWhere('category_ids', 'LIKE', '%' . "," . $request->category . "," . '%');
-        // }
+
         $category = $request->category;
         if ($request->category != "") {
             $query->where(function($q) use($category){
@@ -2414,9 +2180,7 @@ class CourseSettingController extends Controller
         if ($request->instructor != "") {
             $query->where('user_id', $request->instructor);
         }
-        //if ($request->search_status != "") {
-        //    $query->where('courses.status', $request->search_status);
-        //}
+
         if ($request->from_duration != "" || $request->to_duration != "") {
             if ($request->from_duration != "" && $request->to_duration != "") {
                 $query->where('duration', ">=", (int)$request->from_duration)->where("duration", "<=", (int)$request->to_duration);
@@ -2433,19 +2197,13 @@ class CourseSettingController extends Controller
             $query->where('price', '<=', $request->end_price);
         }
 
-        // if (!empty($request->start_price)  && $request->start_price!="" && !empty($request->end_price)  && $request->end_price!="") {
-        //     $query->whereBetween('price', array($request->start_price,$request->end_price));
-        // }
-
         if ($request->total_rating != "") {
             $query->where('total_rating', $request->total_rating);
         }
         if ($request->content_provider != "") {
             $cp = $request->content_provider;
             $query->where('user_id', '=', $cp);
-            //$query = $query->whereHas('user', function ($query) use ($cp) {
-            //    return $query->where('id', $cp);
-            //});
+
         }
 
         if ($request->from_submission_date != "" || $request->to_submission_date != "") {
@@ -2590,13 +2348,7 @@ class CourseSettingController extends Controller
                 }
                 return $scope;
             })
-            // ->addColumn('publishedDate', function ($query) {
-            //     $date = '';
-            //     //if($query->status == 1){ //Active
-            //     $date = showDate($query->publishedDate);
-            //     //}
-            //     return $date;
-            // })
+
             ->addColumn('price', function ($query) {
                 $priceView = '';
                 if ($query->discount_price != null) {
@@ -2810,17 +2562,6 @@ class CourseSettingController extends Controller
                     return $video_list;
                     $totalPage = round($total_videos / 3);
 
-                    // for ($page = 2; $page <= $totalPage; $page++) {
-                    //     $list = $this->getVideoFromVimeoApi($page);
-                    //     if (isset($list['body']['data'])) {
-                    //         if (count($list['body']['data']) != 0) {
-                    //             foreach ($list['body']['data'] as $data) {
-                    //                 $video_list[] = $data;
-                    //             }
-                    //         }
-                    //     }
-                    //     $page++;
-                    // }
 
 
                 }
@@ -2828,7 +2569,6 @@ class CourseSettingController extends Controller
         } catch (\Exception $e) {
             $video_list = [];
         }
-        //$video_list = [];
 
         return $video_list;
     }
@@ -2836,28 +2576,15 @@ class CourseSettingController extends Controller
     public function addNewCourse()
     {
         $user = Auth::user();
-
-        $video_list = $this->getVimeoList();
         $vdocipher_list = $this->getVdoCipherList();
-
-
         $categories = Category::where('status', 1)->get();
-        if ($user->role_id == 1) {
-            $quizzes = OnlineQuiz::where('status', 1)->latest()->get();
-        } else {
-            $quizzes = OnlineQuiz::where('status', 1)->where('created_by', $user->id)->latest()->get();
-        }
-
-        $instructors = User::whereIn('role_id', [1, 2])->select('name', 'id')->get();
+        $quizzes = OnlineQuiz::where('status', 1)->latest()->get();
         $languages = Language::select('id', 'native', 'code')
             ->where('status', '=', 1)
             ->get();
-        $levels = CourseLevel::where('status', 1)->get();
         $title = trans('courses.All');
 
-        $sub_lists = $this->getSubscriptionList();
-
-        return view('coursesetting::add_course', compact('sub_lists', 'levels', 'video_list', 'vdocipher_list', 'title', 'quizzes', 'categories', 'languages', 'instructors', 'vdocipher_list'));
+        return view('coursesetting::add_course', compact('vdocipher_list', 'title', 'quizzes', 'categories', 'languages'));
     }
 
     public function changeLessonChapter(Request $request)

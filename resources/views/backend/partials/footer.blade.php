@@ -34,7 +34,6 @@
         <h3>e-LATiH</h3>
     </a>-->
 @endif
-@livewireScripts
 
 <script>
     window.jsLang = function(key, replace) {

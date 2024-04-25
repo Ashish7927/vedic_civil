@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).on('ready',function () {
     $("#category_id").on("change", function () {
         console.log('change');
         var url = $("#url").val();
@@ -102,7 +102,7 @@ $(document).ready(function () {
     }
 });
 
-$(document).ready(function () {
+$(document).on('ready',function () {
     $(".edit_category_id").on("change", function () {
         var url = $("#url").val();
 
@@ -160,10 +160,10 @@ $(document).ready(function () {
     });
 });
 
-$(document).ready(function () {
+$(document).on('ready',function () {
     let discount = $('#addDiscount');
     let discountDiv = $('#discountDiv');
-    $('#course_2').change(function () {
+    $('#course_2').on('change',function () {
         if (this.checked) {
             $('#price_div').fadeOut('slow');
             discountDiv.fadeOut('slow');
@@ -176,8 +176,9 @@ $(document).ready(function () {
     });
 
 });
-$(document).ready(function () {
-    $('#course_3').change(function () {
+$(document).on('ready',function () {
+    $('#course_3').on('change',function () {
+        alert('ok');
         if (this.checked)
             $('#discount_price_div').fadeIn('slow');
         else
@@ -186,10 +187,10 @@ $(document).ready(function () {
 });
 
 
-$(document).ready(function () {
+$(document).on('ready',function () {
     let discount = $('.editDiscount');
     let discountDiv = $('.editDiscountDiv');
-    $('.edit_course_2').change(function () {
+    $('.edit_course_2').on('change',function () {
         var course_id = $(this).val();
 
         if (this.checked) {
@@ -206,8 +207,8 @@ $(document).ready(function () {
     $('.edit_course_2').trigger('change');
 
 });
-$(document).ready(function () {
-    $('.edit_course_3').change(function () {
+$(document).on('ready',function () {
+    $('.edit_course_3').on('change',function () {
         if (this.checked)
             $('#edit_discount_price_div').fadeIn('slow');
         else
@@ -215,7 +216,7 @@ $(document).ready(function () {
 
     });
 });
-$(document).ready(function () {
+$(document).on('ready',function () {
 
     
     $("#type1").on("click", function () {
@@ -266,7 +267,7 @@ $(document).ready(function () {
         }
     });
 
-    $('.category_id').change(function () {
+    $('.category_id').on('change',function () {
 
         let category_id = $(this).find(":selected").val();
 
@@ -354,7 +355,7 @@ $(document).on('click', '#add_course_btn', function () {
     $('#addMeta').val('');
 });
 
-$('input[type=radio][name=host]').change(function () {
+$('input[type=radio][name=host]').on('change',function () {
     let host = this.value;
     if (host == "Zoom") {
         $('.zoomSetting').show();

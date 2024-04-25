@@ -174,7 +174,7 @@
     'locale' => 'en',
     'fallback_locale' => 'en',
     'faker_locale' => 'en_US',
-    'key' => 'base64:v8/H8+A3QCQhL5qm/IbCABuwTnTPd22Ize6PhQ/wx8U=',
+    'key' => 'base64:m/R14650VofhxAwNZ28HsKPMSB/UHGgXHnKLB9PekhU=',
     'cipher' => 'AES-256-CBC',
     'providers' => 
     array (

@@ -34,10 +34,9 @@ Route::prefix('role-permission')->middleware(['auth', 'admin'])->group(function 
         Route::post('admin/destroy', 'AdminuserController@destroy')->name('admin.delete');
         Route::get('admin/status/{id}', 'AdminuserController@status')->name('admin.change_status');
 
-        /* 23-2-2022 : Changed */
         Route::post('roles/update', 'RolemanageController@update')->name('role.roles.update');
         Route::post('roles/store', 'RolemanageController@store')->name('role.roles.store');
         Route::post('roles/destroy', 'RolemanageController@destroy')->name('role.roles.destroy');
-        /* 23-2-2022 : End */
+
     });
 });

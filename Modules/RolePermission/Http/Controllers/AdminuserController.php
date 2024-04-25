@@ -74,8 +74,6 @@ class AdminuserController extends Controller
 
         try {
 
-            $success = trans('lang.Student') . ' ' . trans('lang.Added') . ' ' . trans('lang.Successfully');
-
 
             $user = new User;
             $user->name = $request->name;
@@ -117,80 +115,6 @@ class AdminuserController extends Controller
 
 
             $user->save();
-             if (Schema::hasTable('users') && Schema::hasTable('chat_statuses')) {
-                if (isModuleActive('Chat')) {
-                    userStatusChange($user->id, 0);
-                }
-            }
-
-
-            $mailchimpStatus = env('MailChimp_Status') ?? false;
-            $getResponseStatus = env('GET_RESPONSE_STATUS') ?? false;
-            $acelleStatus = env('ACELLE_STATUS') ?? false;
-            if (hasTable('newsletter_settings')) {
-                $setting = NewsletterSetting::getData();
-
-
-                if ($setting->instructor_status == 1) {
-                    $list = $setting->instructor_list_id;
-                    if ($setting->instructor_service == "Mailchimp") {
-
-                        if ($mailchimpStatus) {
-                            try {
-                                $MailChimp = new MailChimp(env('MailChimp_API'));
-                                $MailChimp->post("lists/$list/members", [
-                                    'email_address' => $user->email,
-                                    'status' => 'subscribed',
-                                ]);
-
-                            } catch (\Exception $e) {
-                            }
-                        }
-                    } elseif ($setting->instructor_service == "GetResponse") {
-                        if ($getResponseStatus) {
-
-                            try {
-                                $getResponse = new \GetResponse(env('GET_RESPONSE_API'));
-                                $getResponse->addContact(array(
-                                    'email' => $user->email,
-                                    'campaign' => array('campaignId' => $list),
-                                ));
-                            } catch (\Exception $e) {
-
-                            }
-                        }
-                    } elseif ($setting->instructor_service == "Acelle") {
-                        if ($acelleStatus) {
-
-                            try {
-                                $email = $user->email;
-                                $make_action_url = '/subscribers?list_uid=' . $list . '&EMAIL=' . $email;
-                                $acelleController = new AcelleController();
-                                $response = $acelleController->curlPostRequest($make_action_url);
-                            } catch (\Exception $e) {
-
-                            }
-                        }
-                    } elseif ($setting->instructor_service == "Local") {
-                        try {
-                            $check = Subscription::where('email', '=', $user->email)->first();
-                            if (empty($check)) {
-                                $subscribe = new Subscription();
-                                $subscribe->email = $user->email;
-                                $subscribe->type = 'Instructor';
-                                $subscribe->save();
-                            } else {
-                                $check->type = "Instructor";
-                                $check->save();
-                            }
-                        } catch (\Exception $e) {
-
-                        }
-                    }
-                }
-
-
-            }
 
             Toastr::success(trans('common.Operation successful'), trans('common.Success'));
             return redirect()->back();

@@ -16,17 +16,6 @@
             </li>
         @endif
 
-        @if(permissionCheck('frontend.getSmeCourse'))
-            <li>
-                <a href="{{route('frontend.smeCourses')}}">{{ __('setting.Sme Courses') }}</a>
-            </li>
-        @endif
-
-        @if(permissionCheck('frontend.coursesApiDevelopment'))
-            <li>
-                <a href="{{route('frontend.coursesApiDevelopment')}}">{{__('Partner Courses Enabled API')}}</a>
-            </li>
-        @endif
 
         @if (permissionCheck('frontend.homeContent'))
             <li><a href="{{ route('frontend.sliders.index') }}"> {{ __('frontendmanage.Slider') }}</a></li>
@@ -40,9 +29,6 @@
             <li><a href="{{ route('frontend.pageContent') }}"> {{ __('frontendmanage.Page Content') }}</a></li>
         @endif
 
-        @if (permissionCheck('frontend.corporateAccessPageContent'))
-            <li><a href="{{ route('frontend.corporateAccessPageContent') }}"> {{ __('frontendmanage.Corporate Access Page Content') }}</a></li>
-        @endif
 
         @if (permissionCheck('frontend.privacy_policy'))
             <li><a href="{{ route('frontend.privacy_policy') }}"> {{ __('frontendmanage.Privacy Policy') }}</a></li>
@@ -67,13 +53,6 @@
         @if (permissionCheck('frontend.page.index'))
             <li><a href="{{ route('frontend.page.index') }}"> {{ __('frontendmanage.Pages') }}</a></li>
         @endif
-        @if (permissionCheck('frontend.becomeInstructor'))
-            <li><a href="{{ route('frontend.becomeInstructor') }}"> {{ __('frontendmanage.Become Instructor') }}</a>
-            </li>
-        @endif
-        @if (permissionCheck('frontend.sponsors.index'))
-            <li><a href="{{ route('frontend.sponsors.index') }}"> {{ __('sponsor.Sponsors') }}</a></li>
-        @endif
 
 
         @if(permissionCheck('popup-content.index'))
@@ -89,11 +68,11 @@
         @endif
 
 
-        @if(permissionCheck('frontend.loginpage.index'))
+        {{-- @if(permissionCheck('frontend.loginpage.index'))
             <li>
                 <a href="{{route('frontend.loginpage.index')}}">{{ __('frontendmanage.Login & Registration') }}</a>
             </li>
-        @endif
+        @endif --}}
 
         @if (permissionCheck('frontend.faq.index'))
             <li><a href="{{ route('frontend.faq.index') }}">   {{ __('subscription.FAQ') }}</a></li>

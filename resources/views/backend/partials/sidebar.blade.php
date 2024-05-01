@@ -169,6 +169,10 @@
             @include('certificate::menu')
         @endif
 
+        @if (permissionCheck('frontend_CMS'))
+            @include('frontendmanage::menu')
+        @endif
+
         @if (permissionCheck('settings'))
             <li>
                 <a href="#" class="has-arrow" aria-expanded="false">
@@ -199,10 +203,6 @@
                             <a href="{{ route('setting.error_log') }}">{{ __('setting.Error Log') }}</a>
                         </li>
                     @endif
-
-                    <li>
-                        <a href="{{ route('setting.tax_setting') }}">{{ __('tax.Tax') }} {{ __('tax.Settings') }}</a>
-                    </li>
                 </ul>
             </li>
         @endif

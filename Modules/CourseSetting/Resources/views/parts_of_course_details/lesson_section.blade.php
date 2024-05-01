@@ -95,22 +95,7 @@
                                         <option
                                             data-display="{{__('common.Select')}} {{__('courses.Host')}}"
                                             value="">{{__('common.Select')}} {{__('courses.Host')}} </option>
-                                      <!--  <option value="Youtube"
-                                                @if (@$editLesson->host=='Youtube') Selected
-                                                @endif
-                                                @if(empty(@$editLesson) =="Youtube") selected @endif
-                                        >
-                                            Youtube
-                                        </option> -->
-                                      @if(\Illuminate\Support\Facades\Auth::user()->role_id!=7 && !(isPartner()))
-                                        <option value="Vimeo"
-                                                @if (@$editLesson->host=='Vimeo') Selected
-                                                @endif
-                                                @if(empty(@$editLesson) =="Vimeo") selected @endif
-                                        >
-                                            Vimeo
-                                        </option>
-                                      @endif
+
                                         <option value="Self"
                                                 @if (@$editLesson->host=='Self') Selected
                                                 @endif
@@ -118,27 +103,14 @@
                                         >
                                             Video
                                         </option>
-                                      <!--  <option value="VdoCipher"
+                                        <option value="VdoCipher"
                                                 @if (@$editLesson->host=='VdoCipher') Selected
                                                 @endif
                                                 @if(empty(@$editLesson) && @$editLesson->host=="VdoCipher") selected @endif>
                                             VdoCipher
-                                        </option> -->
-                                      @if(\Illuminate\Support\Facades\Auth::user()->role_id!=7 && !(isPartner()))
-                                        <option value="URL"
-                                                @if (@$editLesson->host=='URL') Selected
-                                                @endif
-                                                @if(empty(@$editLesson) && @$editLesson->host=="URL") selected @endif >
-                                            Vimeo URL
                                         </option>
-                                      @endif
 
-                                    {{--    <option value="Iframe"
-                                                @if (@$editLesson->host=='Iframe') Selected
-                                                @endif
-                                                @if(empty(@$editLesson) && @$editLesson->host=="Iframe") selected @endif >
-                                            Iframe embed
-                                        </option> --}}
+
 
                                         <option value="Image"
                                                 @if (@$editLesson->host=='Image') Selected
@@ -185,40 +157,7 @@
                                         </option>
 
 
-                                    {{--    <option value="Zip"
-                                                @if (@$editLesson->host=='Zip') Selected
-                                                @endif
-                                                @if(empty(@$editLesson) && @$editLesson->host=="Zip") selected @endif >
-                                            Zip File
-                                        </option> --}}
-
-
-                                        @if(isModuleActive("AmazonS3"))
-                                            <option value="AmazonS3"
-                                                    @if (@$editLesson->host=='AmazonS3') Selected
-                                                    @endif
-                                                    @if(empty(@$editLesson) =="AmazonS3") selected @endif
-                                            >
-                                                Amazon S3
-                                            </option>
-                                        @endif
-
-                                      {{--  @if(isModuleActive("SCORM")) --}}
-                                            <option value="SCORM"
-
-                                                    @if(empty(@$editLesson) =="SCORM") selected @endif
-                                            >
-                                                SCORM
-                                            </option>
-                                      {{--  @endif --}}
-
-                                        @if(isModuleActive("AmazonS3") && isModuleActive("SCORM"))
-                                            <option value="SCORM-AwsS3"
-                                                    @if(empty(@$editLesson) =="SCORM-AwsS3") selected @endif
-                                            >
-                                                SCORM AWS S3
-                                            </option>
-                                        @endif
+                                    
                                     </select>
                                     @if ($errors->has('category'))
                                         <span class="invalid-feedback invalid-select"
@@ -334,17 +273,6 @@
                                                     data-display="{{__('common.Select')}} video "
                                                     value="">{{__('common.Select')}} video
                                                 </option>
-                                                @foreach ($video_list as $video)
-                                                    @if(isset($editLesson))
-                                                        <option
-                                                            value="{{@$video['uri']}}" {{$video['uri']==$editLesson->video_url?'selected':''}}>{{@$video['name']}}</option>
-                                                    @else
-                                                        <option
-                                                            value="{{@$video['uri']}}">{{@$video['name']}}</option>
-                                                    @endif
-
-
-                                                @endforeach
                                             </select>
                                         @endif
                                         @if ($errors->has('vimeo'))

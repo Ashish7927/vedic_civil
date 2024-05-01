@@ -232,17 +232,6 @@ $(document).on('ready',function () {
     });
 
 
-    $("#type2").on("click", function () {
-        if ($('#type2').is(':checked')) {
-            $(".courseBox").hide();
-            $(".quizBox").show();
-            $(".videoOption").hide();
-            $("#dripCheck").hide();
-            $(".makeResize").addClass("col-xl-6");
-            $(".makeResize").removeClass("col-xl-4");
-        }
-    });
-
     $(".type1").on("click", function () {
         if ($('.type1').is(':checked')) {
             $(".courseBox").show();
@@ -255,17 +244,6 @@ $(document).on('ready',function () {
         }
     });
 
-    $(".type2").on("click", function () {
-
-        if ($('.type2').is(':checked')) {
-            $(".courseBox").hide();
-            $(".videoOption").hide();
-            $(".quizBox").show();
-            $(".dripCheck").hide();
-            $(".makeResize").addClass("col-xl-6");
-            $(".makeResize").removeClass("col-xl-4");
-        }
-    });
 
     $('.category_id').on('change',function () {
 
@@ -335,17 +313,6 @@ $(document).on('ready',function () {
     
 });
 
-function changeType(el) {
-    var validity = document.getElementById('show_validity');
-    var course = document.getElementById('show_course');
-    if (el.value == 1) {
-        validity.style.display = 'block';
-        course.style.display = 'none';
-    } else {
-        validity.style.display = 'none';
-        course.style.display = 'block';
-    }
-}
 
 
 $(document).on('click', '#add_course_btn', function () {

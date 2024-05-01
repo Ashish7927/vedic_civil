@@ -150,35 +150,15 @@
                                         <option data-display="{{__('common.Select')}} {{__('courses.Host')}}"
                                                 value="">{{__('common.Select')}} {{__('courses.Host')}} </option>
 
-
-                                      <!--  <option
-                                            value="Youtube" {{isset($editLesson) ? $editLesson->host=='Youtube'? 'selected':'':'' }} >
-                                            Youtube
-                                        </option> -->
-                                      @if(\Illuminate\Support\Facades\Auth::user()->role_id!=7 && !(isPartner()))
-                                        <option
-                                            value="Vimeo" {{isset($editLesson) ? $editLesson->host=='Vimeo'? 'selected':'':'' }} >
-                                            Vimeo
-                                        </option>
-                                      @endif
-                                      <!--  <option
-                                            value="VdoCipher" {{isset($editLesson) ? $editLesson->host=='VdoCipher'? 'selected':'':'' }} >
-                                            VdoCipher
-                                        </option> -->
                                         <option
                                             value="Self" {{isset($editLesson) ? $editLesson->host=='Self'? 'selected':'':'' }} >
                                             Video
                                         </option>
-                                      @if(\Illuminate\Support\Facades\Auth::user()->role_id!=7 && !(isPartner()))
-                                        <option
-                                            value="URL" {{isset($editLesson) ? $editLesson->host=='URL'? 'selected':'':'' }} >
-                                            Vimeo URL
+                                          <option
+                                            value="VdoCipher" {{isset($editLesson) ? $editLesson->host=='VdoCipher'? 'selected':'':'' }} >
+                                            VdoCipher
                                         </option>
-                                      @endif
-                                        <option
-                                            value="Iframe" {{isset($editLesson) ? $editLesson->host=='Iframe'? 'selected':'':'' }} >
-                                            Iframe embed
-                                        </option> 
+
                                         <option
                                             value="Image" {{isset($editLesson) ? $editLesson->host=='Image'? 'selected':'':'' }} >
                                             Image
@@ -207,27 +187,6 @@
                                             value="PowerPoint" {{isset($editLesson) ? $editLesson->host=='PowerPoint'? 'selected':'':'' }} >
                                             Power Point File
                                         </option>
-
-                                        @if(isModuleActive("AmazonS3"))
-                                            <option
-                                                value="AmazonS3" {{isset($editLesson) ? $editLesson->host=='AmazonS3'? 'selected':'':'' }} >
-                                                Amazon S3
-                                            </option>
-                                        @endif
-
-                                      {{--  @if(isModuleActive("SCORM")) --}}
-                                            <option
-                                                value="SCORM" {{isset($editLesson) ? $editLesson->host=='SCORM'? 'selected':'':'' }} >
-                                                SCORM
-                                            </option>
-                                      {{--  @endif --}}
-
-                                        @if(isModuleActive("AmazonS3") && isModuleActive("SCORM"))
-                                            <option
-                                                value="SCORM-AwsS3" {{isset($editLesson) ? $editLesson->host=='SCORM-AwsS3'? 'selected':'':'' }} >
-                                                SCORM AWS S3
-                                            </option>
-                                        @endif
 
                                     </select>
                                     @if ($errors->has('host'))
@@ -346,17 +305,6 @@
                                                     data-display="{{__('common.Select')}} video "
                                                     value="">{{__('common.Select')}} video
                                                 </option>
-                                                @foreach ($video_list as $video)
-                                                    @if(isset($editLesson))
-                                                        <option
-                                                            value="{{@$video['uri']}}" {{$video['uri']==$editLesson->video_url?'selected':''}}>{{@$video['name']}}</option>
-                                                    @else
-                                                        <option
-                                                            value="{{@$video['uri']}}">{{@$video['name']}}</option>
-                                                    @endif
-
-
-                                                @endforeach
                                             </select>
                                         @endif
                                         @if ($errors->has('vimeo'))
@@ -558,27 +506,6 @@
         //         })
         //     }
         // });
-        $(document).ready(function () {
-            // var $select = $(".select2");
-            // var options = $select.data('select2').options.options;
-
-            // // delete all items of the native select element
-            // // $select.html('');
-            // var items = [];
-
-            // var vimeo_default_list = {!! json_encode($video_list) !!};
-            // $.each(vimeo_default_list,function(key,value){
-            //     // $select.append("<option value=\"" + value.uri + "\">" + value.name + "</option>").change();
-
-            //     items.push({
-            //         "id": value.uri,
-            //         "text": value.name
-            //     });
-            // });
-
-            // var newOption = new Option(items.text, items.id, false, false);
-            // $select.append(newOption).trigger('change');
-        });
 
     </script>
 @endpush

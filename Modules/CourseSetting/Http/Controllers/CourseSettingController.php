@@ -700,21 +700,10 @@ class CourseSettingController extends Controller
 
     public function saveCourse(Request $request)
     {
-        if ($request->status_code == 1) {
             Session::flash('type', 'store');
 
-            if (demoCheck()) {
-                return redirect()->back();
-            }
-
             if ($request->type == 1) {
-                $rules = [
-                    'level' => 'required',
-                ];
-                $this->validate($request, $rules, validationMessage($rules));
-
                 if (isset($request->show_overview_media)) {
-
                     $rules = [
                         'host' => 'required',
                     ];
@@ -740,11 +729,9 @@ class CourseSettingController extends Controller
                         $sub = substr($request->image, 0, $strpos);
                         $name = md5($request->title . rand(0, 1000)) . '.' . 'png';
                         $img = Image::make($request->image);
-                        //                    $img->resize(800, 500);
                         $upload_path = 'uploads/courses/';
                         $img->save($upload_path . $name);
                         $course->image = 'uploads/courses/' . $name;
-
                         $strpos = strpos($request->image, ';');
                         $sub = substr($request->image, 0, $strpos);
                         $name = md5($request->title . rand(0, 1000)) . '.' . 'png';
@@ -757,22 +744,6 @@ class CourseSettingController extends Controller
                         $img->save($upload_path . $name);
                         $course->thumbnail = 'uploads/courses/' . $name;
                     }
-
-                    if ($request->hasFile('trainer_image')) {
-
-                        $strpos = strpos($request->trainer_image, ';');
-                        $sub = substr($request->trainer_image, 0, $strpos);
-                        $name = md5($request->title . rand(0, 1000)) . '.' . 'png';
-                        $img = Image::make($request->trainer_image);
-                        //                    $img->resize(270, 181);
-                        $img->resize(270, null, function ($constraint) {
-                            $constraint->aspectRatio();
-                        });
-                        $upload_path = 'uploads/courses/';
-                        $img->save($upload_path . $name);
-                        $course->trainer_image = 'uploads/courses/' . $name;
-                    }
-
                     $course->user_id = Auth::id();
                     if ($request->type == 1) {
                         if ($request->input("category_ids")) {
@@ -784,10 +755,6 @@ class CourseSettingController extends Controller
                         $course->quiz_id = null;
                         $course->category_id = $request->category;
                         $course->subcategory_id = $request->sub_category;
-                    } elseif ($request->type == 2) {
-                        $course->quiz_id = $request->quiz;
-                        $course->category_id = null;
-                        $course->subcategory_id = null;
                     }
 
 
@@ -798,15 +765,9 @@ class CourseSettingController extends Controller
                     $course->duration = $request->duration;
 
 
-                    if ($request->is_discount == 1) {
-                        $course->discount_price = $request->discount_price;
-                        $course->discount_start_date = $request->discount_start_date;
-                        $course->discount_end_date = $request->discount_end_date;
-                    } else {
                         $course->discount_price = null;
                         $course->discount_start_date = null;
                         $course->discount_end_date = null;
-                    }
                     if ($request->is_free == 1) {
                         $course->price = 0;
                         $course->discount_price = null;
@@ -819,17 +780,12 @@ class CourseSettingController extends Controller
 
                     $course->publish = 1;
                     $course->status = 0;
-                    $course->level = $request->level;
 
                     $course->mode_of_delivery = $request->mode_of_delivery;
 
                     $course->show_overview_media = $request->show_overview_media ? 1 : 0;
                     $course->host = $request->host;
                     $course->subscription_list = $request->subscription_list;
-
-                    if (!empty($request->assign_instructor)) {
-                        $course->user_id = $request->assign_instructor;
-                    }
 
                     if ($request->get('host') == "VdoCipher") {
                         $course->trailer_link = $request->vdocipher;
@@ -838,24 +794,20 @@ class CourseSettingController extends Controller
                     }
 
 
-                    if (!empty($request->assign_instructor)) {
-                        $course->user_id = $request->assign_instructor;
-                    }
-
                     $course->meta_keywords = $request->meta_keywords;
                     $course->meta_description = $request->meta_description;
-                    $course->is_subscription = $request->is_subscription;
+                    $course->is_subscription = 0;
+                    $course->hrdc_commission = 0;
+                    $course->total_enrolled = 0;
                     $course->about = $request->about;
                     $course->requirements = $request->requirements;
                     $course->outcomes = $request->outcomes;
                     $course->type = $request->type;
                     $course->drip = $request->drip;
                     $course->complete_order = $request->complete_order;
+                    
                     if (isset($request->course_type)) {
                         $course->course_type = $request->course_type;
-                    }
-                    if (isset($request->trainer)) {
-                        $course->trainer = $request->trainer;
                     }
 
                     if (isset($request->declaration)) {
@@ -866,13 +818,11 @@ class CourseSettingController extends Controller
                     } else {
                         $course->declaration = 0; //No
                     }
-                    if (Settings('frontend_active_theme') == "edume") {
-                        $course->what_learn1 = $request->what_learn1;
-                        $course->what_learn2 = $request->what_learn2;
-                    }
+                     $course->reviewer_id = Auth::id();
+                      $course->approver_id =Auth::id();
                     $course->save();
-                    $course->detail_tab = 1;
-                    $course->save();
+                    // $course->detail_tab = 1;
+                    // $course->save();
                 }
 
                 $getCourseAfterSave = Course::withoutGlobalScope('withoutsubscription')->latest()->first();
@@ -883,183 +833,7 @@ class CourseSettingController extends Controller
             } catch (Exception $e) {
                 GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
             }
-        } else {
-            $rules = [
-                'title' => 'required',
-            ];
-            $messages = [
-                'required' => 'The :attribute field is required.',
-            ];
-
-            $this->validate($request, $rules, $messages);
-            Session::flash('type', 'store');
-
-            if (demoCheck()) {
-                return redirect()->back();
-            }
-
-            try {
-                $course = new Course();
-                if (!empty($request->image)) {
-                    $fileName = "";
-                    if ($request->hasFile('image')) {
-                        $strpos = strpos($request->image, ';');
-                        $sub = substr($request->image, 0, $strpos);
-                        $name = md5($request->title . rand(0, 1000)) . '.' . 'png';
-                        $img = Image::make($request->image);
-                        //                    $img->resize(800, 500);
-                        $upload_path = 'uploads/courses/';
-                        $img->save($upload_path . $name);
-                        $course->image = 'uploads/courses/' . $name;
-
-                        $strpos = strpos($request->image, ';');
-                        $sub = substr($request->image, 0, $strpos);
-                        $name = md5($request->title . rand(0, 1000)) . '.' . 'png';
-                        $img = Image::make($request->image);
-                        //                    $img->resize(270, 181);
-                        $img->resize(270, null, function ($constraint) {
-                            $constraint->aspectRatio();
-                        });
-                        $upload_path = 'uploads/courses/';
-                        $img->save($upload_path . $name);
-                        $course->thumbnail = 'uploads/courses/' . $name;
-                    }
-                }
-                if (!empty($request->trainer_image)) {
-                    if ($request->hasFile('trainer_image')) {
-
-                        $strpos = strpos($request->trainer_image, ';');
-                        $sub = substr($request->trainer_image, 0, $strpos);
-                        $name = md5($request->title . rand(0, 1000)) . '.' . 'png';
-                        $img = Image::make($request->trainer_image);
-                        //                    $img->resize(270, 181);
-                        $img->resize(270, null, function ($constraint) {
-                            $constraint->aspectRatio();
-                        });
-                        $upload_path = 'uploads/courses/';
-                        $img->save($upload_path . $name);
-                        $course->trainer_image = 'uploads/courses/' . $name;
-                    }
-                } else {
-                    if (file_exists($course->trainer_image) && $request->trainer_image_placeholder == '') {
-                        unlink($course->trainer_image);
-                        $course->trainer_image = $request->trainer_image;
-                    }
-                }
-
-
-                $course->user_id = Auth::id();
-                if ($request->type == 1) {
-                    if ($request->input("category_ids")) {
-                        $category_ids = $request->input('category_ids');
-                        $categoryIds = implode(",", $category_ids);
-                        $categoryIds = "," . $categoryIds . ",";
-                        $course->category_ids = $categoryIds;
-                    }
-                    $course->quiz_id = null;
-                    $course->category_id = $request->category;
-                    $course->subcategory_id = $request->sub_category;
-                } elseif ($request->type == 2) {
-                    $course->quiz_id = $request->quiz;
-                    $course->category_id = null;
-                    $course->category_ids = null;
-                    $course->subcategory_id = null;
-                }
-
-
-                $course->lang_id = $request->language;
-                $course->scope = $request->scope;
-                $course->title = $request->title;
-                $course->slug = null;
-                $course->duration = $request->duration;
-
-
-                if ($request->is_discount == 1) {
-                    $course->discount_price = $request->discount_price;
-                    $course->discount_start_date = $request->discount_start_date;
-                    $course->discount_end_date = $request->discount_end_date;
-                } else {
-                    $course->discount_price = null;
-                    $course->discount_start_date = null;
-                    $course->discount_end_date = null;
-                }
-                if ($request->is_free == 1) {
-                    $course->price = 0;
-                    $course->discount_price = null;
-                    $course->discount_start_date = null;
-                    $course->discount_end_date = null;
-                } else {
-                    $course->price = $request->price;
-                }
-
-
-                $course->publish = 1;
-                $course->status = 0;
-                $course->level = $request->level;
-
-                $course->mode_of_delivery = $request->mode_of_delivery;
-
-                $course->show_overview_media = $request->show_overview_media ? 1 : 0;
-                $course->host = $request->host;
-                $course->subscription_list = $request->subscription_list;
-
-                if (!empty($request->assign_instructor)) {
-                    $course->user_id = $request->assign_instructor;
-                }
-
-                if ($request->get('host') == "VdoCipher") {
-                    $course->trailer_link = $request->vdocipher;
-                } else {
-                    $course->trailer_link = null;
-                }
-
-
-                if (!empty($request->assign_instructor)) {
-                    $course->user_id = $request->assign_instructor;
-                }
-
-                $course->meta_keywords = $request->meta_keywords;
-                $course->meta_description = $request->meta_description;
-                $course->is_subscription = $request->is_subscription;
-                $course->about = $request->about;
-                $course->requirements = $request->requirements;
-                $course->outcomes = $request->outcomes;
-                $course->type = $request->type;
-                $course->drip = $request->drip;
-                $course->complete_order = $request->complete_order;
-                if (isset($request->course_type)) {
-                    $course->course_type = $request->course_type;
-                }
-                if (isset($request->trainer)) {
-                    $course->trainer = $request->trainer;
-                }
-
-                if (isset($request->declaration)) {
-                    if ($request->declaration == 'on')
-                        $course->declaration = 1; //Yes
-                    else
-                        $course->declaration = 0; //No
-                } else {
-                    $course->declaration = 0; //No
-                }
-                if (Settings('frontend_active_theme') == "edume") {
-                    $course->what_learn1 = $request->what_learn1;
-                    $course->what_learn2 = $request->what_learn2;
-                }
-                $course->status = 2;
-                $course->save();
-                $course->detail_tab = 1;
-                $course->save();
-
-                $getCourseAfterSave = Course::withoutGlobalScope('withoutsubscription')->latest()->first();
-
-
-                Toastr::success(trans('common.Operation successful'), trans('common.Success'));
-                return redirect()->to(route('courseDetails', [$getCourseAfterSave->id]) . '?type=courseDetails');
-            } catch (Exception $e) {
-                GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
-            }
-        }
+        
     }
 
     public function uploadFileIntoVimeo($course_title, $file)
@@ -1889,7 +1663,7 @@ class CourseSettingController extends Controller
                 ->get();
             $course_exercises = CourseExercise::where('course_id', $id)->get();
 
-            $video_list = $this->getVimeoList();
+            $video_list = array();
             $vdocipher_list = $this->getVdoCipherList();
 
             $levels = CourseLevel::where('status', 1)->get();
@@ -1961,8 +1735,6 @@ class CourseSettingController extends Controller
             ->get();
         $course_exercises = CourseExercise::where('course_id', $id)->get();
 
-        $video_list = $this->getVimeoList();
-
         $vdocipher_list = $this->getVdoCipherList();
 
 
@@ -1987,7 +1759,7 @@ class CourseSettingController extends Controller
         }
         $course->save();
 
-        return view('coursesetting::course_details', compact('data', 'vdocipher_list', 'levels', 'video_list', 'course', 'chapters', 'categories', 'instructors', 'reviewers', 'languages', 'course_exercises', 'quizzes', 'certificates', 'taggingData'));
+        return view('coursesetting::course_details', compact('data', 'vdocipher_list', 'levels', 'course', 'chapters', 'categories', 'instructors', 'reviewers', 'languages', 'course_exercises', 'quizzes', 'certificates', 'taggingData'));
     }
 
     public function courseDetailsSetSession(Request  $request)

@@ -125,12 +125,6 @@
                     </div>
                 @endif
                 <div class="@if($course->type==1)col-md-12 @else col-md-12  @endif ">
-                    {{-- <div class="main-title">
-                        <h3 class="">
-
-                            {{__('courses.Course')}}
-                        </h3>
-                    </div> --}}
 
                     @if(Session::has('type'))
                         @php
@@ -220,12 +214,6 @@
                                       <input type="hidden" id="certificate_hidden" value="1">
                                   @endif
                                 </li>
-                                {{-- @if($course->drip==1)
-                                    <li class="nav-item">
-                                        <a class="nav-link @if($type=="drip") active @endif" href="#drip" role="tab"
-                                           data-toggle="tab"> {{__('common.Drip Content')}}</a>
-                                    </li>
-                                @endif --}}
                             @endif
 
                         </ul>
@@ -307,17 +295,6 @@
 
                                                             <div class="row d-flex">
 
-                                                                {{-- OLD BUTTON --}}
-                                                                {{-- <div class="col-lg-2">
-                                                                    <button
-                                                                        class="primary-btn  mr-10 fix-gr-bg  align-items-center justify-content-center"
-                                                                        id="add_option_box" style="display: d-flex"><i
-                                                                            class="ti-plus mr-0"> ADD COURSE CURRICULUM</i></button>
-                                                                    <button
-                                                                        class="primary-btn icon-only mr-10 fix-gr-bg"
-                                                                        id="minus_option_box" style="display: none">X
-                                                                    </button>
-                                                                </div> --}}
                                                                 <div class="col-lg-5">
                                                                         <button
                                                                                class="primary-btn radius_30px  fix-gr-bg"
@@ -524,71 +501,7 @@
                                                 @csrf
                                                 {{-- <input type="hidden" name="status_code" id="statusCodeUpdate" value="1" /> --}}
                                                 <div class="row">
-                                                    @if(\Illuminate\Support\Facades\Auth::user()->role_id!=1 && \Illuminate\Support\Facades\Auth::user()->role_id!=7 )
-                                                    <!-- <div class="col-xl-6  ">
-                                                        <label class="primary_input_label mt-1"
-                                                               for=""> {{__('Type')}}</label>
-                                                        <div class="row">
-                                                            <div class="col-md-6 mb-25">
-                                                                <label class="primary_checkbox d-flex mr-12"
-                                                                       for="type{{@$course->id}}1">
-                                                                    <input type="radio"
-                                                                           class="common-radio type1"
-                                                                           id="type{{@$course->id}}1" name="type"
-                                                                           value="1" {{@$course->type==1?"checked":""}}>
 
-                                                                    <span data-toggle="tooltip" title="1"
-                                                                        class="checkmark mr-2"></span> {{__('courses.Course')}}
-                                                                </label>
-                                                            </div>
-
-                                                            <div class="col-md-6 mb-25">
-                                                                <label class="primary_checkbox d-flex mr-12"
-                                                                       for="type{{@$course->id}}2">
-                                                                    <input type="radio" class="common-radio type2"
-                                                                           id="type{{@$course->id}}2" name="type"
-                                                                           value="2" {{@$course->type==2?"checked":""}}>
-
-                                                                    <span data-toggle="tooltip" title="2"
-                                                                        class="checkmark mr-2"></span>{{__('quiz.Quiz')}}
-                                                                </label>
-                                                            </div>
-                                                        </div>
-
-                                                    </div> -->
-
-
-                                                        <!-- <div class="col-xl-6 dripCheck"
-                                                             @if($course->type!=1)style="display: none" @endif>
-                                                            <div class="primary_input mb-25">
-                                                                <label class="primary_input_label mt-1"
-                                                                       for=""> {{__('common.Drip Content')}}</label>
-                                                                <div class="row">
-                                                                    <div class="col-md-6 mb-25">
-                                                                        <label class="primary_checkbox d-flex mr-12"
-                                                                               for="drip{{@$course->id}}0">
-                                                                            <input type="radio" class="common-radio drip0"
-                                                                                   id="drip{{@$course->id}}0" name="drip"
-                                                                                   value="0" {{@$course->drip==0?"checked":""}}>
-
-                                                                            <span data-toggle="tooltip" title="0"
-                                                                                class="checkmark mr-2"></span> {{__('common.No')}}
-                                                                        </label>
-                                                                    </div>
-                                                                    <div class="col-md-6 mb-25">
-                                                                        <label class="primary_checkbox d-flex mr-12"
-                                                                               for="drip{{@$course->id}}1">
-                                                                            <input type="radio" class="   drip1"
-                                                                                   id="drip{{@$course->id}}1" name="drip"
-                                                                                   value="1" {{@$course->drip==1?"checked":""}}>
-                                                                            <span data-toggle="tooltip" title="1"
-                                                                                class="checkmark mr-2"></span> {{__('common.Yes')}}
-                                                                        </label>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div> -->
-                                                    @endif
                                                     <div
                                                         class=" @if(\Illuminate\Support\Facades\Auth::user()->role_id==1) col-xl-8 @else col-xl-12  @endif">
                                                         <div class="primary_input mb-25">
@@ -603,101 +516,28 @@
                                                         </div>
                                                     </div>
 
-                                                    @if(\Illuminate\Support\Facades\Auth::user()->role_id==1)
-                                                        <div class="col-xl-4">
-                                                            <div class="primary_input mb-25">
-                                                                <label class="primary_input_label"
-                                                                       for="assign_instructor">{{__('courses.Assign Instructor')}} </label>
-                                                                <select class="primary_select category_id"
-                                                                        title="{{__('courses.Assign Instructor')}}"
-                                                                        name="assign_instructor"
-                                                                        id="assign_instructor" {{$errors->has('assign_instructor') ? 'autofocus' : ''}}>
-                                                                    <option
-                                                                        data-display="{{__('common.Select')}} {{__('courses.Trainer')}}"
-                                                                        value="">{{__('common.Select')}} {{__('courses.Trainer')}} </option>
-                                                                    @foreach($instructors as $instructor)
 
-                                                                        <option
-                                                                            value="{{$instructor->id}}" {{$instructor->id==$course->user_id?'selected':''}}>{{@$instructor->name}} </option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    @endif
-
-                                                    {{-- @if((\Illuminate\Support\Facades\Auth::user()->role_id==isPIC()) && $course->status == 0)
-                                                        <div class="col-xl-4">
-                                                            <div class="primary_input mb-25">
-                                                                <label class="primary_input_label"
-                                                                       for="assign_reviewer">Assign Course Reviewer </label>
-                                                                <select class="primary_select category_id"
-                                                                        title="Assign Course Reviewer"
-                                                                        name="assign_reviewer"
-                                                                        id="assign_reviewer" {{$errors->has('assign_reviewer') ? 'autofocus' : ''}}>
-                                                                    <option
-                                                                        data-display="{{__('common.Select')}} Course Reviewer"
-                                                                        value="">{{__('common.Select')}} Course Reviewer </option>
-                                                                    @foreach($reviewers as $reviewer)
-                                                                        <option
-                                                                            value="{{$reviewer->id}}" {{$reviewer->id==$course->user_id?'selected':''}}>{{@$reviewer->name}} </option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    @endif --}}
+                                                    
                         {{-- @if(auth()->user()->role_id==7) --}}
                         <div class="col-xl-6 mb-25">
                             <div class="primary_input">
                                 <label class="primary_input_label"
                                        for="">{{__('courses.Type')}}</label>
-                                {{-- <input class="primary_input_field" name="course_type" placeholder="-"
-                                       id="course_type"
-                                       type="text" {{$errors->has('course_type') ? 'autofocus' : ''}}
-                                       value="{{old('course_type')}}"> --}}
                                 <select class="primary_select course_type" name="course_type"
                                     title="{{__('courses.Type')}}"
                                     id="course_type" {{$errors->has('course_type') ? 'autofocus' : ''}}>
                                     <option data-display="{{__('common.Select')}} {{__('courses.Type')}}"
                                             value="0">{{__('common.Select')}} {{__('courses.Type')}} </option>
-                                    {{-- <option value="1" {{$course->course_type==1?'selected':''}}>Micro-credential</option> --}}
-                                    {{-- <option value="2" {{$course->course_type==2?'selected':''}}>Claimable</option> --}}
-                                    {{-- <option value="3" {{$course->course_type==3?'selected':''}}>Other</option> --}}
                                     <option value="4" {{$course->course_type==4?'selected':''}}>e-learning</option>
 
                                 </select>
                             </div>
                         </div>
 
-                        <div class="col-xl-6 mb-25">
-                            <div class="primary_input">
-                                <label class="primary_input_label" for="">Trainer <span>*</span></label>
-                                <input class="primary_input_field" name="trainer"  data-toggle="tooltip"
-                                title="{{old('trainer')}}" placeholder="-" id="trainer" type="text" {{$errors->has('trainer') ? 'autofocus' : ''}} value="{{@$course->trainer}}" >
-                            </div>
-                        </div>
-                        {{-- @endif --}}
-
                                                 </div>
                                                 <input type="hidden" name="id" class="course_id"
                                                        value="{{@$course->id}}">
                                                 <div class="col-xl-12 p-0">
-                                                    <div class="row">
-                                                        <div class="col-xl-12">
-                                                            <div class="primary_input mb-35">
-                                                                <label class="primary_input_label"
-                                                                       for="about">{{__('courses.Course')}} {{__('courses.Requirements')}} <span>*</span> <i class="fas fa-info-circle" data-toggle="tooltip" title="• Course requirements
-                                                                       Description:
-                                                                       Course prerequisite that the learner must have prior enrolling to the course (if any). The course requirement to be stated in standard bullet format.
-                                                                       "></i></label>
-                                                                <textarea class="lms_summernote_course_details_1 tooltip_class"
-                                                                          name="requirements"
-                                                                          data-toggle="tooltip"
-                                                                          title="{{__('courses.Requirements')}}"
-                                                                          id="about" cols="30"
-                                                                          rows="10">{!!@$course->requirements!!}</textarea>
-                                                            </div>
-                                                        </div>
-                                                    </div>
 
                                                     <div class="primary_input mb-35">
                                                         <label class="primary_input_label mt-1"
@@ -710,24 +550,6 @@
                                                                   cols="30" rows="10">{!!@$course->about!!}</textarea>
                                                     </div>
 
-                                                    <div class="row">
-                                                        <div class="col-xl-12">
-                                                            <div class="primary_input mb-35">
-                                                                <label class="primary_input_label"
-                                                                       for="about">{{__('courses.Course')}} {{__('courses.Outcomes')}}  *
-                                                                       <i class="fas fa-info-circle" data-toggle="tooltip" title="•	Course Outcome
-                                       Description: Insert your course outcome which the learner will acquire in this course.
-                                       "></i>
-                                                                     </label>
-                                                                <textarea class="lms_summernote_course_details_3 tooltip_class"
-                                                                          name="outcomes"
-                                                                            data-toggle="tooltip"
-                                                                            title="{{__('courses.Outcomes')}}"
-                                                                          id="about" cols="30"
-                                                                          rows="10">{!!@$course->outcomes!!}</textarea>
-                                                            </div>
-                                                        </div>
-                                                    </div>
                                                     <div class="row">
 
                                                         @php
@@ -757,30 +579,7 @@
                                                                 @endforeach
                                                             </select>
                                                         </div>
-                                                        {{-- <div class="col-xl-{{$col_size}} courseBox mb-25"
-                                                             id="edit_subCategoryDiv{{@$course->id}}">
-                                                             <label class="primary_input_label" for="">{{ __('courses.Sub Category') }}</label>
-                                                            <select class="primary_select " name="sub_category"
-                                                                    id="edit_subcategory_id{{@$course->id}}"
-                                                                    title="{{__('courses.Sub Category')}}">
-                                                                <option
-                                                                    data-display="{{__('common.Select')}} {{__('courses.Sub Category')}}"
-                                                                    value="">{{__('common.Select')}} {{__('courses.Sub Category')}}
-                                                                </option>
-                                                                <option value="{{@$course->subcategory_id}}"
-                                                                        selected>{{@$course->subCategory->name}}</option>
-                                                                @if(isset($course->category->subcategories))
-                                                                    @foreach($course->category->subcategories as $sub)
-                                                                        @if($course->subcategory_id !=$sub->id)
-                                                                            <option
-                                                                                value="{{@$sub->id}}"
-                                                                            >{{@$sub->name}}</option>
-                                                                        @endif
-                                                                    @endforeach
-                                                                @endif
-
-                                                            </select>
-                                                        </div> --}}
+                                                       
                                                         <div class="col-xl-{{$col_size}} courseBox mb_30">
                                                             <label class="primary_input_label"
                                                                    for="">{{__('courses.Skill Area 2')}} </label>
@@ -796,24 +595,7 @@
                                                                 @endforeach
                                                             </select>
                                                         </div>
-                                                      {{--  @if (courseSetting()->show_mode_of_delivery==1)
-                                                            <div class="col-xl-{{$col_size}}  courseBox mb-25">
-                                                              <label class="primary_input_label" for="">{{ __('courses.Mode of Delivery') }}</label>
-                                                                <select class="primary_select" name="mode_of_delivery"
-                                                                 title="{{ __('courses.Mode of Delivery') }}">
-                                                                    <option
-                                                                        data-display="{{ __('common.Select') }} {{ __('courses.Mode of Delivery') }}"
-                                                                        value="">{{ __('common.Select') }} {{ __('courses.Mode of Delivery') }}</option>
-                                                                    <option
-                                                                        value="1" {{$course->mode_of_delivery==1?'selected':''}}>{{__('courses.Online')}}</option>
-                                                                   <option
-                                                                        value="2" {{$course->mode_of_delivery==2?'selected':''}}>{{__('courses.Distance Learning')}}</option>
-                                                                    <option
-                                                                        value="3" {{$course->mode_of_delivery==3?'selected':''}}>{{__('courses.Face-to-Face')}}</option>
-
-                                                                </select>
-                                                            </div>
-                                                        @endif --}}
+                                                     
 
                                                         <div class="col-xl-6  quizBox mb-25" style=" display: none">
                                                            <label class="primary_input_label" for="">{{__('quiz.Quiz')}}</label>
@@ -830,21 +612,6 @@
                                                             </select>
                                                         </div>
 
-                                                        <div class="col-xl-4   mb-25 makeResize">
-                                                          <label class="primary_input_label" for="">{{ __('courses.Level') }} *</label>
-                                                            <select class="primary_select" name="level"
-                                                             data-toggle="tooltip" title="{{__('courses.Level')}}">
-                                                                <option
-                                                                    data-display="{{__('common.Select')}} {{__('courses.Level')}}"
-                                                                    value="">{{__('common.Select')}} {{__('courses.Level')}}</option>
-                                                                @foreach($levels as $level)
-                                                                    <option value="{{$level->id}}"
-                                                                            @if (@$course->level==$level->id) selected @endif>
-                                                                        {{$level->title}}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
                                                         <div class="col-xl-4 mb-25 makeResize" id="">
                                                           <label class="primary_input_label" for="">{{__('common.Language')}} *</label>
                                                             <select class="primary_select" name="language"
@@ -859,7 +626,7 @@
                                                                 @endforeach
                                                             </select>
                                                         </div>
-                                                        <div class="col-xl-4 makeResize mb-25">
+                                                        {{-- <div class="col-xl-4 makeResize mb-25">
                                                             <div class="primary_input ">
                                                                 <label
                                                                     class="primary_input_label mt-1 primary_input_label"
@@ -876,7 +643,7 @@
                                                                        data-toggle="tooltip" title="{{@$course->duration}}"
                                                                 >
                                                             </div>
-                                                        </div>
+                                                        </div> --}}
                                                     </div>
                                                     <div class="col-xl-12 courseBox mb-25">
                                                         <div class="primary_input  ">
@@ -977,89 +744,12 @@
                                                                 <label class="primary_input_label mt-1"
                                                                        for="">{{__('courses.Price')}} <i class="fas fa-info-circle" data-toggle="tooltip" title="• Price
                                                                        Description:
-                                                                       Insert course price without RM/MYR. Price is inclusive of SST (if applicable).
+                                                                       Insert course price without RS?Rupees. Price is inclusive of SST (if applicable).
                                                                        "></i></label>
                                                                 <input class="primary_input_field" name="price"
                                                                        placeholder="-" value="{{@$course->price}}"
                                                                        type="text" data-toggle="tooltip"
                                                                        title="{{__('courses.Price')}}" id="addPrice">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row mt-20 editDiscountDiv">
-                                                        <div class="col-xl-12">
-                                                            <div class="checkbox_wrap d-flex align-items-center mt-40">
-                                                                <label for="edit_course_3"
-                                                                       class="switch_toggle  mr-2">
-                                                                    <input type="checkbox" class="edit_course_3"
-                                                                           name="is_discount"
-                                                                           @if ($course->discount_price>0) checked
-
-                                                                           @endif id="edit_course_3"
-                                                                           value="1"
-                                                                           data-toggle="tooltip" title="1">
-                                                                    <i class="slider round"></i>
-                                                                </label>
-                                                                <label
-                                                                    class="mb-0">{{__('courses.This course has discounted price')}}</label>
-                                                            </div>
-                                                        </div>
-                                                        @php
-                                                            if ($course->discount_price>0){
-                                                                $d_price='block';
-                                                            }else{
-                                                                 $d_price='none';
-                                                            }
-                                                        @endphp
-                                                        <div class="col-xl-12"
-                                                             id="edit_discount_price_div"
-                                                             style="display: {{$d_price}}">
-                                                             <div class="row" >
-                                                                <div class="col-xl-4" >
-                                                                    <div class="primary_input mb-25">
-                                                                        <label class="primary_input_label mt-1"
-                                                                            for="">{{__('courses.Discount')}} {{__('courses.Price')}}</label>
-                                                                        <input class="primary_input_field editDiscount"
-                                                                            name="discount_price" id="addDiscount"
-                                                                            value="{{@$course->discount_price}}"
-                                                                            placeholder="-" type="text" data-toggle="tooltip"
-                                                                            title="{{__('courses.Discount')}} {{__('courses.Price')}}">
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-xl-4">
-                                                                    <div class="primary_input mb-15">
-                                                                        <label class="primary_input_label" for="startDate">{{ __('courses.Discount') }} {{ __('courses.Start Date') }}</label>
-                                                                        <div class="primary_datepicker_input">
-                                                                            <div class="no-gutters input-right-icon">
-                                                                                <div class="col">
-                                                                                    <div class="">
-                                                                                        <input class="primary_input_field" type="date" name="discount_start_date" id="discount_start_date" value="{{@$course->discount_start_date}}" min="{{ now()->toDateString('Y-m-d') }}">
-                                                                                    </div>
-                                                                                </div>
-                                                                                <button class="" type="button">
-                                                                                </button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-xl-4">
-                                                                    <div class="primary_input mb-15">
-                                                                        <label class="primary_input_label" for="startDate">{{ __('courses.Discount') }} {{ __('courses.End Date') }}</label>
-                                                                        <div class="primary_datepicker_input">
-                                                                            <div class="no-gutters input-right-icon">
-                                                                                <div class="col">
-                                                                                    <div class="">
-                                                                                        <input class="primary_input_field" type="date" name="discount_end_date" id="discount_end_date" value="{{@$course->discount_end_date}}" min="{{ now()->toDateString('Y-m-d') }}">
-                                                                                    </div>
-                                                                                </div>
-                                                                                <button class="" type="button">
-                                                                                </button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1105,31 +795,14 @@
                                                                     <option value=""
                                                                             data-display="{{__('common.Select')}} {{__('courses.Host')}}">{{__('common.Select')}} {{__('courses.Host')}}</option>
 
-                                                                {{--    <option
-                                                                        data-display="{{__('courses.Image Preview')}}"
-                                                                        value="ImagePreview" {{@$course->host=="ImagePreview"?'selected':''}}>{{__('courses.Image Preview')}}
-                                                                    </option> --}}
-
-                                                                <!--    <option value="Youtube"
-                                                                            @if (@$course->host=='Youtube') Selected
-                                                                            @endif
-                                                                            @if(empty(@$course) && @$course->host=="Youtube") selected @endif
-                                                                    >
-                                                                        Youtube
-                                                                    </option> -->
-                                                                    <option value="Vimeo"
-                                                                            @if (@$course->host=='Vimeo') Selected
-                                                                            @endif
-                                                                            @if(empty(@$course) && @$course->host=="Vimeo") selected @endif
-                                                                    >
-                                                                        Vimeo
-                                                                    </option>
-                                                                  <!--  <option value="VdoCipher"
+                                                               
+                                                                   
+                                                                    <option value="VdoCipher"
                                                                             @if (@$course->host=='VdoCipher') Selected
                                                                             @endif
                                                                             @if(empty(@$course) && @$course->host=="VdoCipher") selected @endif>
                                                                         VdoCipher
-                                                                    </option> -->
+                                                                    </option> 
                                                                     <option value="Self"
                                                                             @if (@$course->host=='Self') Selected
                                                                             @endif
@@ -1139,30 +812,7 @@
                                                                     </option>
 
 
-                                                                    @if(isModuleActive("AmazonS3"))
-                                                                        <option value="AmazonS3"
-                                                                                @if (@$course->host=='AmazonS3') Selected
-                                                                                @endif
-                                                                                @if(empty(@$course) && @$course->host=="AmazonS3") selected @endif
-                                                                        >
-                                                                            Amazon S3
-                                                                        </option>
-                                                                    @endif
-                                                                    @if(isModuleActive("SCORM"))
-                                                                    {{--    <option value="SCORM"
-                                                                                @if(empty(@$course) && @$course->host=="SCORM") selected @endif
-                                                                        >
-                                                                            SCORM Self
-                                                                        </option> --}}
-                                                                    @endif
-
-                                                                    @if(isModuleActive("AmazonS3") && isModuleActive("SCORM"))
-                                                                        <option value="SCORM-AwsS3"
-                                                                                @if(empty(@$course) && @$course->host=="SCORM-AwsS3") selected @endif
-                                                                        >
-                                                                            SCORM AWS S3
-                                                                        </option>
-                                                                    @endif
+                                                                   
                                                                 </select>
 
                                                             </div>
@@ -1172,55 +822,30 @@
                                                                         var key = $(this).data('key');
                                                                         let category_id = $('#category_id' + key).find(":selected").val();
 
-                                                                        if (category_id === 'Youtube' || category_id === 'URL') {
-                                                                            $("#iframeBox" + key).hide();
-                                                                            $("#videoUrl" + key).show();
-                                                                            $("#vimeoUrl" + key).hide();
-                                                                            $("#VdoCipherUrl" + key).hide();
-                                                                            $("#vimeoVideo" + key).val('');
-                                                                            $("#youtubeVideo" + key).val('');
-                                                                            $("#fileupload" + key).hide();
+                                                                        if ((category_id === 'Self') || (category_id === 'Zip') || (category_id === 'PowerPoint') || (category_id === 'Excel') || (category_id === 'Text') || (category_id === 'Word') || (category_id === 'PDF') || (category_id === 'Image')) {
 
-                                                                        } else if ((category_id === 'Self') || (category_id === 'Zip') || (category_id === 'PowerPoint') || (category_id === 'Excel') || (category_id === 'Text') || (category_id === 'Word') || (category_id === 'PDF') || (category_id === 'Image') || (category_id === 'AmazonS3') || (category_id === 'SCORM') || (category_id === 'SCORM-AwsS3')) {
-
-                                                                            $("#iframeBox" + key).hide();
+                                                                            
                                                                             $("#fileupload" + key).show();
                                                                             $("#videoUrl" + key).hide();
-                                                                            $("#vimeoUrl" + key).hide();
-                                                                            $("#vimeoVideo" + key).val('');
-                                                                            $("#youtubeVideo" + key).val('');
+                                                                            
+                                                                            
+                                                                            
                                                                             $("#VdoCipherUrl" + key).hide();
 
-                                                                        } else if (category_id === 'Vimeo') {
-                                                                            $("#iframeBox" + key).hide();
-                                                                            $("#videoUrl" + key).hide();
-                                                                            $("#vimeoUrl" + key).show();
-                                                                            $("#vimeoVideo" + key).val('');
-                                                                            $("#youtubeVideo" + key).val('');
-                                                                            $("#fileupload" + key).hide();
-                                                                            $("#VdoCipherUrl" + key).hide();
                                                                         } else if (category_id === 'VdoCipher') {
-                                                                            $("#iframeBox" + key).hide();
+                                                                            
                                                                             $("#videoUrl" + key).hide();
-                                                                            $("#vimeoUrl" + key).hide();
+                                                                            
                                                                             $("#VdoCipherUrl" + key).show();
-                                                                            $("#vimeoVideo" + key).val('');
-                                                                            $("#youtubeVideo" + key).val('');
+                                                                            
+                                                                            
                                                                             $("#fileupload" + key).hide();
-                                                                        } else if (category_id === 'Iframe') {
-                                                                            $("#iframeBox" + key).show();
-                                                                            $("#videoUrl" + key).hide();
-                                                                            $("#vimeoUrl" + key).hide();
-                                                                            $("#vimeoVideo" + key).val('');
-                                                                            $("#youtubeVideo" + key).val('');
-                                                                            $("#fileupload" + key).hide();
-                                                                            $("#VdoCipherUrl" + key).hide();
                                                                         } else {
-                                                                            $("#iframeBox" + key).hide();
+                                                                            
                                                                             $("#videoUrl" + key).hide();
-                                                                            $("#vimeoUrl" + key).hide();
-                                                                            $("#vimeoVideo" + key).val('');
-                                                                            $("#youtubeVideo" + key).val('');
+                                                                            
+                                                                            
+                                                                            
                                                                             $("#fileupload" + key).hide();
                                                                             $("#VdoCipherUrl" + key).hide();
                                                                         }
@@ -1246,61 +871,7 @@
                                                                     </span>
                                                                     @endif
                                                                 </div>
-                                                                <div class="input-effect " id="vimeoUrl12"
-                                                                     style="display: @if((isset($course) && ($course->host!="Vimeo")) || !isset($course)) none  @endif">
-                                                                    <div class="" id="">
-                                                                        @if(config('vimeo.connections.main.upload_type')=="Direct")
-                                                                            <div class="primary_file_uploader">
-                                                                                <input
-                                                                                    class="primary-input filePlaceholder"
-                                                                                    type="text"
-                                                                                    id=""
-                                                                                    data-toggle="tooltip"
-                                                                                    title="{{__('courses.Browse Video file')}}"
-                                                                                    {{$errors->has('image') ? 'autofocus' : ''}}
-                                                                                    placeholder="{{__('courses.Browse Video file')}}"
-                                                                                    readonly="">
-                                                                                <button class="" type="button">
-                                                                                    <label
-                                                                                        class="primary-btn small fix-gr-bg"
-                                                                                        for="document_file_thumb_vimeo_add">{{__('common.Browse') }}</label>
-                                                                                    <input type="file"
-                                                                                           class="d-none fileUpload"
-                                                                                           name="vimeo"
-                                                                                           id="document_file_thumb_vimeo_add">
-                                                                                </button>
-                                                                            </div>
-                                                                        @else
-                                                                            <select class="primary_select" name="vimeo"
-                                                                                    id="vimeoVideo1"
-                                                                                    title="Video">
-                                                                                <option
-                                                                                    data-display="{{__('common.Select')}} video "
-                                                                                    value="">{{__('common.Select')}}
-                                                                                    video
-                                                                                </option>
-                                                                                @foreach ($video_list as $video)
-                                                                                    @if(isset($course))
-                                                                                        <option
-                                                                                            value="{{@$video['uri']}}" {{$video['uri']==$course->trailer_link?'selected':''}}>{{@$video['name']}}</option>
-                                                                                    @else
-                                                                                        <option
-                                                                                            value="{{@$video['uri']}}">{{@$video['name']}}</option>
-                                                                                    @endif
-
-
-                                                                                @endforeach
-                                                                            </select>
-                                                                        @endif
-                                                                        @if ($errors->has('vimeo'))
-                                                                            <span
-                                                                                class="invalid-feedback invalid-select"
-                                                                                role="alert">
-                                            <strong>{{ $errors->first('vimeo') }}</strong>
-                                        </span>
-                                                                        @endif
-                                                                    </div>
-                                                                </div>
+                                                                
 
                                                                 <div class="input-effect" id="VdoCipherUrl12"
                                                                      style="display: @if((isset($editLesson) && ($editLesson->host!="VdoCipher")) || !isset($editLesson)) none  @endif">
@@ -1317,17 +888,7 @@
                                                                             </option>
                                                                             <option value="{{$course->trailer_link}}"
                                                                                     selected></option>
-                                                                            {{--                                                                            @foreach ($vdocipher_list as $vdo)--}}
-                                                                            {{--                                                                                @if(isset($editLesson))--}}
-                                                                            {{--                                                                                    <option--}}
-                                                                            {{--                                                                                        value="{{@$vdo->id}}" {{$vdo->id==$editLesson->video_url?'selected':''}}>{{@$vdo->title}}</option>--}}
-                                                                            {{--                                                                                @else--}}
-                                                                            {{--                                                                                    <option--}}
-                                                                            {{--                                                                                        value="{{@$vdo->id}}">{{@$vdo->title}}</option>--}}
-                                                                            {{--                                                                                @endif--}}
-
-
-                                                                            {{--                                                                            @endforeach--}}
+                                                                            
                                                                         </select>
                                                                         @if ($errors->has('vdocipher'))
                                                                             <span
@@ -1357,7 +918,6 @@
                                                     </div>
 
 
-                                                    @if(Auth::user()->role_id != 7)
                                                     <div class="row" style="display: none">
                                                         <div class="col-xl-6 mt-20">
                                                             <label>{{__('courses.View Scope')}} </label>
@@ -1377,27 +937,7 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    @else
-                                                        <div class="row" style="display: none">
-                                                            <div class="col-xl-6 mt-20">
-                                                                <label>{{__('courses.View Scope')}} </label>
-                                                                <select class="primary_select " name="scope"
-                                                                        id=""
-                                                                        data-toggle="tooltip"
-                                                                        title="{{__('courses.Public')}}">
-                                                                    <option
-                                                                        value="1" selected>{{__('courses.Public')}}
-                                                                    </option>
-
-                                                                    <option
-                                                                        {{@$course->scope=="0"?'selected':''}} value="0">
-                                                                        {{__('courses.Private')}}
-                                                                    </option>
-
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    @endif
+                                                   
 
                                                     <div class="row mt-20">
                                                         <div class="col-xl-12">
@@ -1428,123 +968,7 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="row mt-20">
-                                                        <div class="col-xl-12">
-                                                            <div class="primary_input mb-35">
-                                                                <label class="primary_input_label mt-1"
-                                                                       for="">Trainer's Image (Recommended size: 200x200)</label>
-                                                                <div class="primary_file_uploader">
-                                                                    <input class="primary-input filePlaceholder" type="text" id="input_trainer_img"
-                                                                    data-toggle="tooltip" title="Trainer's Image" value="{{showPicName(@$course->trainer_image)}}" placeholder="Browse Image file" readonly="" name="trainer_image_placeholder">
-                                                                    <button class="" type="button">
-                                                                        @if(!empty($course->trainer_image))
-                                                                            <label class="primary-btn small remove_btn"><i class="fa fa-times"></i></label>
-                                                                        @else
-                                                                            <label class="primary-btn small remove_btn" style="display: none"><i class="fa fa-times"></i></label>
-                                                                        @endif
-                                                                        <label class="primary-btn small fix-gr-bg"
-                                                                               for="trainer_img">{{__('common.Browse')}}</label>
-                                                                        <input type="file" class="d-none fileUpload"
-                                                                               name="trainer_image"
-                                                                               id="trainer_img">
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row">
-
-                                                        <div class="col-xl-12">
-                                                            <div class="primary_input mb-25">
-                                                                <label class="primary_input_label mt-1"
-                                                                       for="">{{__('courses.Meta keywords')}}
-                                                                       <i class="fas fa-info-circle" data-toggle="tooltip" title="•	Meta Keywords
-                                       Description: Insert a minimum of 5 specific keywords separated with comma that reflects the course.
-                                       Eg: Excel, Beginner, Microsoft,
-                                       "></i>
-                                                                       </label>
-                                                                <input class="primary_input_field" name="meta_keywords"
-                                                                       value="{{@$course->meta_keywords}}"
-                                                                       placeholder="-" type="text"
-                                                                       data-toggle="tooltip"
-                                                                       title="{{__('courses.Meta keywords')}}">
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-
-                                                    @if(Settings('frontend_active_theme')=="edume")
-                                                        <div class="row">
-                                                            <div class="col-xl-6">
-                                                                <div class="primary_input mb-25">
-                                                                    <label class="primary_input_label"
-                                                                           for="">{{__('courses.Key Point') }}
-                                                                        (1)</label>
-                                                                    <input class="primary_input_field"
-                                                                           name="what_learn1" placeholder="-"
-                                                                           type="text"
-                                                                           data-toggle="tooltip"
-                                                                           title="{{__('courses.Key Point') }}(1)"
-                                                                           value="{{old('what_learn1',@$course->what_learn1)}}">
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="col-xl-6">
-                                                                <div class="primary_input mb-25">
-                                                                    <label class="primary_input_label"
-                                                                           for="">{{__('courses.Key Point') }}
-                                                                        (2) </label>
-                                                                    <input class="primary_input_field"
-                                                                           name="what_learn2" placeholder="-"
-                                                                           type="text"
-                                                                           data-toggle="tooltip"
-                                                                           title="{{__('courses.Key Point') }} (2)"
-                                                                           value="{{old('what_learn2',@$course->what_learn2)}}">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    @endif
-                                                    <div class="row">
-
-                                                        <div class="col-xl-12">
-                                                            <div class="primary_input mb-25">
-                                                                <label class="primary_input_label mt-1"
-                                                                       for="">{{__('courses.Meta description')}}
-                                                                       <i class="fas fa-info-circle" data-toggle="tooltip" title="•	Meta Description
-                                      Description: Meta description is displayed in a search engine result. Insert a brief two-line summary or description of the course.
-                                      "></i>
-                                                                       </label>
-                                                                <textarea id="my-textarea" class="primary_input_field tooltip_class"
-                                                                          name="meta_description" style="height: 200px"
-                                                                          rows="3"
-                                                                           data-toggle="tooltip"
-                                                                           title="{{__('courses.Meta description')}}">{!!@$course->meta_description!!}</textarea>
-                                                            </div>
-
-                                                        </div>
-
-                                                    </div>
-                    {{-- @if(auth()->user()->role_id==7)  --}}
-                    <div class="row">
-                        <div class="col-xl-12">
-                            <!-- <div class="form-group">
-                                <label data-id="bg_option" class="primary_checkbox d-flex mr-12 " style="width: 100%">
-                                    <input name="declaration" type="checkbox" {{($course->declaration == 1)? 'checked' : ''}}>
-                                    <span class="checkmark" data-toggle="tooltip" title="{{$course->declaration}}"></span>
-                                    <span class="ml-2"><b>I hereby declare that all the above information is correct, accurate and not plagiarized from any party.</b></span>
-                                </label>
-                            </div> -->
-                             @if(Auth::user()->role_id == 7 || isPartner())
-                            {{-- <div class="form-group">
-                                <label data-id="bg_option" class="primary_checkbox d-flex mr-12 " style="width: 100%">
-                                    <span class="ml-2"><b>This is a familiarization stage for Course Provider to familiar with the platform feature.</b></span>
-                                </label>
-                            </div> --}}
-                            @endif
-                        </div>
-                    </div>
-                    {{-- @endif --}}
+                                                
                                                     <input type="hidden" name="update_course_status" id="updateCourseStatus" value="1" />
                                                     <input type="hidden" name="status_code" id="statusCodeUpdate" value="{{ isset($course->status) && $course->status == 2 ? 2 : 1}}" />
 
@@ -2550,14 +1974,7 @@
 
         $(document).ready(function () {
 
-            var start_date = $("#discount_start_date").val();
-            if(start_date!=""){
-                $("#discount_end_date").attr("min", start_date);
-            }
 
-            $("#discount_start_date").change(function(){
-                $("#discount_end_date").attr("min", $(this).val());
-            });
 
             $('#select_input_type').change(function () {
                 console.log('selected');
@@ -2584,55 +2001,30 @@
             $('#category_id').change(function () {
                 let category_id = $('#category_id').find(":selected").val();
                 console.log("Host : " + category_id);
-                if (category_id === 'Youtube' || category_id === 'URL') {
-                    $("#iframeBox").hide();
-                    $("#videoUrl").show();
-                    $("#vimeoUrl").hide();
-                    $("#vimeoVideo").val('');
-                    $("#youtubeVideo").val('');
-                    $("#fileupload").hide();
-                    $("#VdoCipherUrl").hide();
+                if ((category_id === 'Self') || (category_id === 'Zip') || (category_id === 'PowerPoint') || (category_id === 'Excel') || (category_id === 'Text') || (category_id === 'Word') || (category_id === 'PDF') || (category_id === 'Image') ) {
 
-                } else if ((category_id === 'Self') || (category_id === 'Zip') || (category_id === 'PowerPoint') || (category_id === 'Excel') || (category_id === 'Text') || (category_id === 'Word') || (category_id === 'PDF') || (category_id === 'Image') || (category_id === 'AmazonS3') || (category_id === 'SCORM') || (category_id === 'SCORM-AwsS3')) {
-
-                    $("#iframeBox").hide();
+                    
                     $("#fileupload").show();
                     $("#videoUrl").hide();
-                    $("#vimeoUrl").hide();
-                    $("#vimeoVideo").val('');
-                    $("#youtubeVideo").val('');
+                    
+                    
+                    
                     $("#VdoCipherUrl").hide();
 
-                } else if (category_id === 'Vimeo') {
-                    $("#iframeBox").hide();
-                    $("#videoUrl").hide();
-                    $("#vimeoUrl").show();
-                    $("#vimeoVideo").val('');
-                    $("#youtubeVideo").val('');
-                    $("#fileupload").hide();
-                    $("#VdoCipherUrl").hide();
                 } else if (category_id === 'VdoCipher') {
-                    $("#iframeBox").hide();
+                    
                     $("#videoUrl").hide();
-                    $("#vimeoUrl").hide();
-                    $("#vimeoVideo").val('');
-                    $("#youtubeVideo").val('');
+                    
+                    
+                    
                     $("#fileupload").hide();
                     $("#VdoCipherUrl").show();
-                } else if (category_id === 'Iframe') {
-                    $("#iframeBox").show();
-                    $("#videoUrl").hide();
-                    $("#vimeoUrl").hide();
-                    $("#vimeoVideo").val('');
-                    $("#youtubeVideo").val('');
-                    $("#fileupload").hide();
-                    $("#VdoCipherUrl").hide();
                 } else {
-                    $("#iframeBox").hide();
+                    
                     $("#videoUrl").hide();
-                    $("#vimeoUrl").hide();
-                    $("#vimeoVideo").val('');
-                    $("#youtubeVideo").val('');
+                    
+                    
+                    
                     $("#fileupload").hide();
                     $("#VdoCipherUrl").hide();
                 }
@@ -2644,31 +2036,26 @@
 
                 let category_id1 = $('#category_id1').find(":selected").val();
                 console.log("Host : " + category_id1);
-                if (category_id1 === 'Youtube') {
-                    $("#videoUrl1").show();
-                    $("#vimeoUrl1").hide();
-                    $("#vimeoVideo1").val('');
-                    $("#youtubeVideo1").val('');
+
+                if (category_id1 === 'VdoCipher') {
+                    $("#VdoCipherUrl1").show();
+                    
+                    
+                   
                     $("#fileupload1").hide();
 
-                } else if ((category_id1 === 'Self') || (category_id === 'Document') || (category_id === 'Image') || (category_id1 === 'AmazonS3') || (category_id1 === 'SCORM') || (category_id1 === 'SCORM-AwsS3')) {
+                } else if ((category_id1 === 'Self') || (category_id === 'Document') || (category_id === 'Image')) {
                     $("#fileupload1").show();
                     $("#videoUrl1").hide();
-                    $("#vimeoUrl1").hide();
-                    $("#vimeoVideo1").val('');
-                    $("#youtubeVideo1").val('');
+                    
+                    
+                   
 
-                } else if (category_id1 === 'Vimeo') {
-                    $("#videoUrl1").hide();
-                    $("#vimeoUrl1").show();
-                    $("#vimeoVideo1").val('');
-                    $("#youtubeVideo1").val('');
-                    $("#fileupload1").hide();
                 } else {
                     $("#videoUrl1").hide();
-                    $("#vimeoUrl1").hide();
-                    $("#vimeoVideo1").val('');
-                    $("#youtubeVideo1").val('');
+                    
+                    
+                   
                     $("#fileupload1").hide();
                 }
             });
@@ -2836,19 +2223,7 @@
                     });
                 }
             });
-            /*    var lessonId = $("#VdoCipherVideoLesson option:selected").val();
-                if (lessonId != "") {
-                    $.ajax({
-                        url: "{{url('admin/course/vdocipher/video')}}/" + lessonId,
-                    success: function (data) {
-                        $(".lessonVdocipher option:selected").text(data.title)
-                        getVdoCipherIistForLesson();
-                    },
-                    error: function () {
-                        console.log('failed')
-                    }
-                });
-            }*/
+
 
 
         });
@@ -3083,15 +2458,10 @@
             $('.loading-spinner').addClass('active');
         }
         function submitloaderstop(){
-            // $('.btn_text_submit').text('Submit Course');
-            // $('.submit_check').addClass('ti-check');
-            //$('#submit_button_parent').prop('disabled', false);
+
             $('.submit-loading-spinner').removeClass('active');
         }
         function submitloaderstart(){
-            // $('.btn_text_submit').text('');
-            // $('.submit_check').removeClass('ti-check');
-            //$('#submit_button_parent').prop('disabled', true);
             $('.submit-loading-spinner').addClass('active');
         }
 

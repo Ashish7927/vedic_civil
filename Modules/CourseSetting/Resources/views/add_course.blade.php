@@ -145,7 +145,8 @@
                                     {{ $errors->has('course_type') ? 'autofocus' : '' }}>
                                     <option data-display="{{ __('common.Select') }} {{ __('courses.Type') }}"
                                         value="0">{{ __('common.Select') }} {{ __('courses.Type') }} </option>
-                                    <option value="4" {{ old('course_type') == 4 ? 'selected' : '' }}>e-learning</option>
+                                    <option value="4" {{ old('course_type') == 4 ? 'selected' : '' }}>e-learning
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -193,18 +194,6 @@
                             </select>
                         </div>
 
-                        <div class="col-xl-6 mt-30 quizBox" style="display: none">
-                            <label class="primary_input_label" for="">{{ __('quiz.Quiz') }}</label>
-                            <select class="primary_select" name="quiz" title="{{ __('quiz.Quiz') }}" id="quiz_id"
-                                {{ $errors->has('quiz') ? 'autofocus' : '' }}>
-                                <option data-display="{{ __('common.Select') }} {{ __('quiz.Quiz') }} *" value="">
-                                    {{ __('common.Select') }} {{ __('quiz.Quiz') }} </option>
-                                @foreach ($quizzes as $quiz)
-                                    <option value="{{ $quiz->id }}" {{ $quiz->id == old('quiz') ? 'selected' : '' }}>
-                                        {{ @$quiz->title }} </option>
-                                @endforeach
-                            </select>
-                        </div>
 
                         <div class="col-xl-4 makeResize" id="">
                             <label class="primary_input_label" for="">{{ __('common.Language') }} *</label>
@@ -291,7 +280,8 @@
                             <div class="checkbox_wrap d-flex align-items-center mt-40">
                                 <label for="course_2" class="switch_toggle mr-2">
                                     <input type="checkbox" id="course_2" value="1" name="is_free"
-                                        data-toggle="tooltip" title="1" {{ old('is_free') == '1' ? 'checked' : '' }}>
+                                        data-toggle="tooltip" title="1"
+                                        {{ old('is_free') == '1' ? 'checked' : '' }}>
                                     <i class="slider round"></i>
                                 </label>
                                 <label class="mb-0">{{ __('courses.This course is a free course') }}</label>
@@ -315,72 +305,6 @@
                         </div>
 
                     </div>
-                    <div class="row mt-20" id="discountDiv"
-                        style="display: {{ old('is_free') != '' && old('is_free') == '1' ? 'none' : 'block' }};">
-                        <div class="col-lg-6">
-                            <div class="checkbox_wrap d-flex align-items-center mt-40">
-                                <label for="course_3" class="switch_toggle mr-2">
-                                    <input type="checkbox" id="course_3" value="1" name="is_discount"
-                                        data-toggle="tooltip" title="1"
-                                        {{ old('is_discount') == '1' ? 'checked' : '' }}>
-                                    <i class="slider round"></i>
-                                </label>
-                                <label class="mb-0">{{ __('courses.This course has discounted price') }}</label>
-                            </div>
-                        </div>
-                        <div class="row" id="discount_price_div"
-                            style="display: {{ old('is_discount') != '' && old('is_discount') == '1' ? 'block' : 'none' }};">
-                            <div class="col-xl-4">
-                                <div class="primary_input mb-25">
-                                    <label class="primary_input_label" for="">{{ __('courses.Discount') }}
-                                        {{ __('courses.Price') }}</label>
-                                    <input class="primary_input_field" name="discount_price" placeholder="-"
-                                        id="addDiscount" data-toggle="tooltip" title="{{ __('courses.Price') }}"
-                                        type="text" value="{{ old('discount_price') }}">
-                                </div>
-                            </div>
-                            <div class="col-xl-4">
-                                <div class="primary_input mb-15">
-                                    <label class="primary_input_label" for="startDate">{{ __('courses.Discount') }}
-                                        {{ __('courses.Start Date') }}</label>
-                                    <div class="primary_datepicker_input">
-                                        <div class="no-gutters input-right-icon">
-                                            <div class="col">
-                                                <div class="">
-                                                    <input class="primary_input_field" type="date"
-                                                        name="discount_start_date" id="discount_start_date"
-                                                        min="{{ now()->toDateString('Y-m-d') }}">
-                                                </div>
-                                            </div>
-                                            <button class="" type="button">
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-xl-4">
-                                <div class="primary_input mb-15">
-                                    <label class="primary_input_label" for="startDate">{{ __('courses.Discount') }}
-                                        {{ __('courses.End Date') }}</label>
-                                    <div class="primary_datepicker_input">
-                                        <div class="no-gutters input-right-icon">
-                                            <div class="col">
-                                                <div class="">
-                                                    <input class="primary_input_field" type="date"
-                                                        name="discount_end_date" id="discount_end_date"
-                                                        min="{{ now()->toDateString('Y-m-d') }}">
-                                                </div>
-                                            </div>
-                                            <button class="" type="button">
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
                     <div class="row mt-20 mb-10 videoOption">
                         <div class="col-lg-6">
                             <div class="checkbox_wrap d-flex align-items-center mt-40">
@@ -398,22 +322,15 @@
                     <div class="row mt-20 videoOption" id="overview_host_section"
                         style="display: {{ old('show_overview_media') == '' && old('show_overview_media') != '1' ? 'none' : '' }};">
                         <div class="col-xl-4 mt-25">
-                            <select class="primary_select category_id " name="host"
-                                title="{{ __('courses.Course overview host') }}" id="">
+                            <select class="primary_select" name="host"
+                                title="{{ __('courses.Course overview host') }}" id="host_type">
                                 <option data-display="{{ __('courses.Course overview host') }} *" value="">
                                     {{ __('courses.Course overview host') }}
                                 </option>
 
-                                <option value="Vimeo"
-                                    {{ @$course->host == 'Vimeo' || old('host') == 'Vimeo' ? 'selected' : '' }}>
-                                    {{ __('courses.Vimeo') }}
+                                <option value="VdoCipher"
+                                    {{ @$course->host == 'Vimeo' || old('host') == 'Vimeo' ? 'selected' : '' }}>VdoCipher
                                 </option>
-                                @if (isModuleActive('AmazonS3'))
-                                    <option value="AmazonS3"
-                                        {{ @$course->host == 'AmazonS3' || old('host') == 'AmazonS3' ? 'selected' : '' }}>
-                                        {{ __('courses.Amazon S3') }}
-                                    </option>
-                                @endif
 
                                 <option value="Self"
                                     {{ @$course->host == 'Self' || old('host') == 'Self' ? 'selected' : '' }}>
@@ -424,129 +341,73 @@
                             </select>
                         </div>
                         <div class="col-xl-8">
-                            @if (old('host') == 'Youtube')
-                                <div class="input-effect videoUrl">
+                            @if (old('host') == 'VdoCipher')
+                                <div class="row VdoCipherUrl">
                                 @else
-                                    <div class="input-effect videoUrl"
-                                        style="display:@if ((isset($course) && @$course->host != 'Youtube') || !isset($course)) none @endif">
+                                    <div class="row VdoCipherUrl"
+                                        style="display: @if ((isset($course) && $course->trailer_link != 'VdoCipher') || !isset($editLesson)) none @endif">
                             @endif
-                            <label>{{ __('courses.Video URL') }}
-                                <span>*</span></label>
-                            <input id=""
-                                class="primary_input_field youtubeVideo name{{ $errors->has('trailer_link') ? ' is-invalid' : '' }}"
-                                type="text" name="trailer_link" placeholder="{{ __('courses.Video URL') }}"
-                                autocomplete="off" data-toggle="tooltip" title="{{ __('courses.Video URL') }}"
-                                value="{{ old('trailer_link') }}"
-                                {{ $errors->has('trailer_link') ? 'autofocus' : '' }}>
-                            <span class="focus-border"></span>
-                            @if ($errors->has('trailer_link'))
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $errors->first('trailer_link') }}</strong>
-                                </span>
-                            @endif
-                        </div>
 
-                        @if (old('host') == 'Vimeo')
-                            <div class="row  vimeoUrl" id="">
+
+                            <div class="input-effect " id="">
+                                <div class="" id="">
+                                    <label class="primary_input_label"
+                                        for="">{{ __('courses.VdoCipher Video') }}</label>
+                                    <select class="select2 vdocipherList " name="vdocipher" title="video"
+                                        id="VdoCipherVideo">
+                                        <option data-display="{{ __('common.Select') }} video " value="">
+                                            {{ __('common.Select') }} video
+                                        </option>
+                                        @foreach ($vdocipher_list as $vdo)
+                                            @if (isset($editLesson))
+                                                <option value="{{ @$vdo->id }}"
+                                                    {{ $vdo->id == $editLesson->video_url ? 'selected' : '' }}>
+                                                    {{ @$vdo->title }}
+                                                </option>
+                                            @else
+                                                <option value="{{ @$vdo->id }}"
+                                                    {{ @$vdo->id == old('vdocipher') ? 'selected' : '' }}>
+                                                    {{ @$vdo->title }}
+                                                </option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                    @if ($errors->has('vdocipher'))
+                                        <span class="invalid-feedback invalid-select" role="alert">
+                                            <strong>{{ $errors->first('vdocipher') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                        @if (old('host') == 'Self')
+                            <div class="row videofileupload" id="">
                             @else
-                                <div class="row  vimeoUrl" id=""
-                                    style="display: @if ((isset($course) && @$course->host != 'Vimeo') || !isset($course)) none @endif">
+                                <div class="row  videofileupload" id=""
+                                    style="display: @if ((isset($course) && (@$course->host == 'Vimeo' || @$course->host == 'Youtube')) || !isset($course)) none @endif">
                         @endif
 
-                        <div class="col-lg-12" id="">
-                            <label class="primary_input_label" for="">{{ __('courses.Vimeo Video') }}</label>
 
-
-                            @if (config('vimeo.connections.main.upload_type') == 'Direct')
+                        <div class="col-xl-12">
+                            <div class="primary_input">
+                                <label class="primary_input_label" for="">{{ __('courses.Video File') }}</label>
                                 <div class="primary_file_uploader">
-                                    <input class="primary-input filePlaceholder" type="text" id=""
-                                        {{ $errors->has('image') ? 'autofocus' : '' }}
-                                        placeholder="{{ __('courses.Browse Video file') }}" readonly=""
-                                        data-toggle="tooltip" title="{{ __('courses.Vimeo Video') }}">
-                                    <button class="" type="button">
-                                        <label class="primary-btn small fix-gr-bg"
-                                            for="document_file_thumb_vimeo_add">{{ __('common.Browse') }}</label>
-                                        <input type="file" class="d-none fileUpload" name="vimeo"
-                                            id="document_file_thumb_vimeo_add">
-                                    </button>
+                                    <input type="file" class="filepond" name="file" data-toggle="tooltip"
+                                        title="{{ __('courses.Video File') }}">
                                 </div>
-                            @else
-                                <select class="primary_select vimeoVideo" title="{{ __('courses.Video') }}"
-                                    name="vimeo" id="">
-                                    <option data-display="{{ __('common.Select') }} {{ __('courses.Video') }}"
-                                        value="">{{ __('common.Select') }} {{ __('courses.Video') }}
-                                    </option>
-                                </select>
-                            @endif
-                            @if ($errors->has('vimeo'))
-                                <span class="invalid-feedback invalid-select" role="alert">
-                                    <strong>{{ $errors->first('vimeo') }}</strong>
-                                </span>
-                            @endif
-                        </div>
-                    </div>
-                    @if (old('host') == 'VdoCipher')
-                        <div class="row VdoCipherUrl">
-                        @else
-                            <div class="row VdoCipherUrl" style="display: @if ((isset($course) && $course->trailer_link != 'VdoCipher') || !isset($editLesson)) none @endif">
-                    @endif
-
-
-                    <div class="input-effect " id="">
-                        <div class="" id="">
-                            <label class="primary_input_label"
-                                for="">{{ __('courses.VdoCipher Video') }}</label>
-                            <select class="select2 vdocipherList " name="vdocipher" title="video" id="VdoCipherVideo">
-                                <option data-display="{{ __('common.Select') }} video " value="">
-                                    {{ __('common.Select') }} video
-                                </option>
-                                @foreach ($vdocipher_list as $vdo)
-                                    @if (isset($editLesson))
-                                        <option value="{{ @$vdo->id }}"
-                                            {{ $vdo->id == $editLesson->video_url ? 'selected' : '' }}>{{ @$vdo->title }}
-                                        </option>
-                                    @else
-                                        <option value="{{ @$vdo->id }}"
-                                            {{ @$vdo->id == old('vdocipher') ? 'selected' : '' }}>{{ @$vdo->title }}</option>
-                                    @endif
-                                @endforeach
-                            </select>
-                            @if ($errors->has('vdocipher'))
-                                <span class="invalid-feedback invalid-select" role="alert">
-                                    <strong>{{ $errors->first('vdocipher') }}</strong>
-                                </span>
-                            @endif
+                            </div>
                         </div>
                     </div>
             </div>
-            @if (old('host') == 'Self')
-                <div class="row videofileupload" id="">
-                @else
-                    <div class="row  videofileupload" id=""
-                        style="display: @if ((isset($course) && (@$course->host == 'Vimeo' || @$course->host == 'Youtube')) || !isset($course)) none @endif">
-            @endif
-
-
-            <div class="col-xl-12">
-                <div class="primary_input">
-                    <label class="primary_input_label" for="">{{ __('courses.Video File') }}</label>
-                    <div class="primary_file_uploader">
-                        <input type="file" class="filepond" name="file" data-toggle="tooltip"
-                            title="{{ __('courses.Video File') }}">
-                    </div>
-                </div>
-            </div>
-        </div>
-        </div>
         </div>
 
-        @if (Auth::user()->role_id != 7)
             <div class="row" style="display: none">
                 <div class="col-xl-6 mt-20">
                     <label>{{ __('courses.View Scope') }} </label>
                     <select class="primary_select " name="scope" id="" data-toggle="tooltip"
                         title="{{ __('courses.Public') }}">
-                        <option value="1" {{ @$course->scope == '1' ? 'selected' : '' }}>{{ __('courses.Public') }}
+                        <option value="1" {{ @$course->scope == '1' ? 'selected' : '' }}>
+                            {{ __('courses.Public') }}
                         </option>
 
                         <option {{ @$course->scope == '0' ? 'selected' : '' }} value="0">
@@ -556,23 +417,7 @@
                     </select>
                 </div>
             </div>
-        @else
-            <div class="row" style="display: none">
-                <div class="col-xl-6 mt-20">
-                    <label>{{ __('courses.View Scope') }} </label>
-                    <select class="primary_select " name="scope" id="" data-toggle="tooltip"
-                        title="{{ __('courses.Public') }}">
-                        <option value="1" selected>{{ __('courses.Public') }}
-                        </option>
 
-                        <option {{ @$course->scope == '0' ? 'selected' : '' }} value="0">
-                            {{ __('courses.Private') }}
-                        </option>
-
-                    </select>
-                </div>
-            </div>
-        @endif
         <div class="row mt-20">
             <div class="col-xl-6">
                 <div class="primary_input mb-35">
@@ -616,19 +461,11 @@
         <div class="col-lg-12 text-center pt_15">
             <div class="d-flex justify-content-center">
 
-                @if (Auth::user()->role_id == 7)
-                    <button style="margin-right: 18px" class="primary-btn semi_large2  fix-gr-bg" id="save_button_parent"
-                        type="button"><i class="ti-check save_check"></i>
-                        <span class="btn_text">{{ __('common.Save') }} {{ __('courses.Course') }}</span>
-                        <i class="loading-spinner fa fa-lg fas fa-spinner fa-spin"></i>
-                    </button>
-                @else
                     <button style="margin-left: 18px;" class="btn primary-btn semi_large2  fix-gr-bg"
                         id="add_button_parent" type="button"><i class="ti-check add_check"></i>
                         <span class="btn_text_add">{{ __('common.Add') }} {{ __('courses.Course') }}</span>
                         <i class="add-loading-spinner fa fa-lg fas fa-spinner fa-spin"></i>
                     </button>
-                @endif
 
             </div>
         </div>
@@ -651,6 +488,25 @@
                 overview_host_section.hide();
             }
         });
+        let host_type = $('#host_type');
+
+        host_type.change(function() {
+            console.log(host_type.val());
+            if (host_type.val() === 'Self' ) {
+                $(this).closest('.videoOption').find('.VdoCipherUrl').hide();
+                $(this).closest('.videoOption').find('.videofileupload').show();
+                $(this).closest('.videoOption').find('.videofileupload');
+            } else if (host_type.val() === 'VdoCipher') {
+                $(this).closest('.videoOption').find('.videofileupload').hide();
+                $(this).closest('.videoOption').find('.VdoCipherUrl').show();
+                $(this).closest('.videoOption').find('.videofileupload');
+            } else {
+                $(this).closest('.videoOption').find('.VdoCipherUrl').hide();
+                $(this).closest('.videoOption').find('.videofileupload').hide();
+                $(this).closest('.videoOption').find('.videofileupload');
+            }
+        });
+        
     </script>
     <script>
         let show_mode_of_delivery = $('#show_mode_of_delivery');
@@ -665,7 +521,7 @@
     </script>
 @endpush
 @push('scripts')
-    <script src="{{asset('/')}}/Modules/CourseSetting/Resources/assets/js/course.js"></script>
+    <script src="{{ url('/') }}/Modules/CourseSetting/Resources/assets/js/course.js"></script>
 
 
 
@@ -710,6 +566,7 @@
             var tooltip_text = $(this).attr('title');
             $(this).next('div').attr('title', tooltip_text)
         });
+
         $('textarea.tooltip_class').each(function() {
             var tooltip_text = $(this).attr('title');
             $(this).next('div.note-editor').find('.note-editing-area').find('.note-editable').attr('title',
@@ -718,23 +575,14 @@
     </script>
     <script>
         $(document).ready(function() {
-            var start_date = $("#discount_start_date").val();
-            if (start_date != "") {
-                $("#discount_end_date").attr("min", start_date);
-            }
-
-            $("#discount_start_date").change(function() {
-                $("#discount_end_date").attr("min", $(this).val());
-            });
 
             $("#save_button_parent").click(function() {
                 $('#statusCode').attr('value', '2');
-                // $("#addCourseForm").submit(); // Submit the form
                 ajaxforcoursevalidation();
             });
+
             $("#add_button_parent").click(function() {
                 $('#statusCode').attr('value', '1');
-                // $("#addCourseForm").submit(); // Submit the form
                 ajaxforcoursevalidation();
             });
         });
@@ -763,13 +611,10 @@
             var formData = new FormData(document.getElementById("addCourseForm"));
             var btn = $('#statusCode').val();
             var addPrice = $('#addPrice').val();
-            var addDiscount = $('#addDiscount').val();
+
             if ($('#course_3').is(':checked')) {
-                if (addPrice != "" && addDiscount != "") {
-                    if (parseInt(addDiscount) > parseInt(addPrice)) {
-                        toastr.error("The Discount price more that original price!");
-                        return false;
-                    }
+                if (addPrice != "" ) {
+
                 }
             }
 
@@ -806,13 +651,11 @@
     </script>
     <script>
         $(document).ready(function() {
-            // Select2 Multiple
             $('.select2-multiple').select2({
                 width: "100%",
                 placeholder: "Select Skill Area 2:",
                 allowClear: true
             });
-
         });
     </script>
 @endpush

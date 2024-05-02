@@ -61,22 +61,7 @@
                                     </select>
                                 </div>
 
-                                @if(!check_whether_cp_or_not() && !isPartner())
-                                <div class="col-lg-3 mt-30">
 
-                                    <label class="primary_input_label"
-                                           for="instructor">{{__('courses.Trainer')}}</label>
-                                    <select class="select2" name="instructor" id="instructor">
-                                        <option data-display="{{__('common.Select')}} {{__('courses.Trainer')}}"
-                                                value="">{{__('common.Select')}} {{__('courses.Trainer')}}</option>
-                                        {{-- @foreach($instructors as $instructor)
-                                            <option
-                                                value="{{$instructor->id}}" {{isset($category_instructor)?$category_instructor==$instructor->id?'selected':'':''}}>{{@$instructor->name}} </option>
-                                        @endforeach --}}
-                                    </select>
-
-                                </div>
-                                @endif
                                 <div class="col-lg-3 mt-30 d-none">
                                     <label class="primary_input_label" for="course">{{__('courses.Statistics')}}</label>
                                     <select class="primary_select" name="course" id="course">
@@ -168,22 +153,6 @@
                                     </select>
                                 </div>
                                 @endif
-                                @if(auth()->user()->role_id == 1)
-                                <div class="col-lg-3 mt-30">
-
-                                    <label class="primary_input_label" for="content_provider">Content Provider</label>
-                                    <select class="primary_select" name="content_provider" id="content_provider">
-                                        <option data-display="{{__('common.Select')}}"
-                                                value="">{{__('common.Select')}}</option>
-                                        @if(isset($cps))
-                                            @foreach($cps as $cp)
-                                                <option value="{{ $cp->id }}">{{ $cp->name }}</option>
-                                            @endforeach
-                                        @endif
-                                    </select>
-
-                                </div>
-                                @endif
 
                                 @if(Route::current()->getName() == 'getPendingCourse')
                                     <div class="col-lg-3 mt-30">
@@ -264,7 +233,7 @@
                                             {{__('coupons.Title')}}</th>
                                         <th scope="col">{{__('courses.Category')}}</th>
                                        <!-- <th scope="col">{{__('quiz.Quiz')}}</th> -->
-                                        <th scope="col">{{__('courses.Trainer')}}</th>
+                                        {{-- <th scope="col">{{__('courses.Trainer')}}</th> --}}
                                         <th scope="col">{{__('common.Status')}}</th>
                                         <th scope="col">Featured</th>
                                         <th scope="col">{{__('courses.Lesson')}}</th>

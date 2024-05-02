@@ -391,7 +391,7 @@ class CourseSettingController extends Controller
         try {
             $user = Auth::user();
 
-            $video_list = $this->getVimeoList();
+            $video_list = array();
             $vdocipher_list = $this->getVdoCipherList();
 
             $courses = [];
@@ -2372,32 +2372,33 @@ class CourseSettingController extends Controller
 
     public function getVdoCipherList()
     {
-        /*
+        
             try {
-                $curl = curl_init();
 
                 $header = array(
                     "Accept: application/json",
-                    "Authorization:Apisecret " . env('VDOCIPHER_API_SECRET'),
+                    "Authorization:Apisecret " . 'LDInDISDZyEHo9UtMn0Fx9xmJj1Hle3pLRzlofIAFGNzLBkhieTbaaJnt9ZN6NSC',
                     "Content-Type: application/json"
                 );
-
-                // &q=array
-                curl_setopt_array($curl, array(
-                    CURLOPT_URL => "https://dev.vdocipher.com/api/videos?page=1&limit=20",
-                    CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_ENCODING => "",
-                    CURLOPT_MAXREDIRS => 10,
-                    CURLOPT_TIMEOUT => 30,
-                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                    CURLOPT_CUSTOMREQUEST => "GET",
-                    CURLOPT_HTTPHEADER => $header,
-                ));
-
-                $response = curl_exec($curl);
-                $err = curl_error($curl);
-
-                curl_close($curl);
+                $curl = curl_init();
+                    
+                    curl_setopt_array($curl, array(
+                      CURLOPT_URL => 'https://dev.vdocipher.com/api/videos?page=1&limit=20',
+                      CURLOPT_RETURNTRANSFER => true,
+                      CURLOPT_ENCODING => '',
+                      CURLOPT_MAXREDIRS => 10,
+                      CURLOPT_TIMEOUT => 0,
+                      CURLOPT_FOLLOWLOCATION => true,
+                      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                      CURLOPT_CUSTOMREQUEST => 'GET',
+                      CURLOPT_HTTPHEADER => array(
+                        'Authorization: Apisecret LDInDISDZyEHo9UtMn0Fx9xmJj1Hle3pLRzlofIAFGNzLBkhieTbaaJnt9ZN6NSC'
+                      ),
+                    ));
+                    
+                    $response = curl_exec($curl);
+                    $err = curl_error($curl);
+                    curl_close($curl);
                 if ($err) {
                     return [];
                 } else {
@@ -2406,8 +2407,6 @@ class CourseSettingController extends Controller
             } catch (\Exception $e) {
                 return [];
             }
-        */
-        return [];
     }
 
     public function courseMakeAsFeature($id, $type)
@@ -2470,22 +2469,25 @@ class CourseSettingController extends Controller
                 $search = '';
             }
 
-            //            &q=array
-            curl_setopt_array($curl, array(
-                CURLOPT_URL => "https://dev.vdocipher.com/api/videos?page=" . $page . "&limit=20&q=" . $search,
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => "",
-                CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 30,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => "GET",
-                CURLOPT_HTTPHEADER => $header,
-            ));
-
-            $response = curl_exec($curl);
-            $err = curl_error($curl);
-
-            curl_close($curl);
+            $curl = curl_init();
+                    
+                    curl_setopt_array($curl, array(
+                      CURLOPT_URL => 'https://dev.vdocipher.com/api/videos?page='.$page.'&limit=20&q='.$search,
+                      CURLOPT_RETURNTRANSFER => true,
+                      CURLOPT_ENCODING => '',
+                      CURLOPT_MAXREDIRS => 10,
+                      CURLOPT_TIMEOUT => 0,
+                      CURLOPT_FOLLOWLOCATION => true,
+                      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                      CURLOPT_CUSTOMREQUEST => 'GET',
+                      CURLOPT_HTTPHEADER => array(
+                        'Authorization: Apisecret LDInDISDZyEHo9UtMn0Fx9xmJj1Hle3pLRzlofIAFGNzLBkhieTbaaJnt9ZN6NSC'
+                      ),
+                    ));
+                    
+                    $response = curl_exec($curl);
+                    $err = curl_error($curl);
+                    curl_close($curl);
             if ($err) {
                 return [];
             } else {

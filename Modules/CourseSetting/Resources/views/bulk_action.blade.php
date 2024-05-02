@@ -55,19 +55,8 @@
                     enctype="multipart/form-data">
                     @csrf
 
-                    @if (isAdmin())
-                        <div class="input-group mb-3">
-                            <select class="primary_select label" name="user_id" title="{{__('common.Content Provider')}}/{{__('common.Partner')}}" id="user_id">
-                                <option title="" data-display="{{__('common.Select')}} {{__('common.Content Provider')}}/{{__('common.Partner')}}"
-                                value="">{{__('common.Select')}} {{__('common.Content Provider')}}/{{__('common.Partner')}} </option>
-                                @foreach ($content_providers as $content_provider)
-                                    <option value="{{ $content_provider->id }}"> {{ $content_provider->name }} </option>
-                                @endforeach
-                            </select>
-                        </div>
-                    @else
+
                         <input type="hidden" name="user_id" value="{{ auth()->id() }}">
-                    @endif
 
                     <div class="input-group mb-3">
                         <input type="file" name="file" class="form-control label">

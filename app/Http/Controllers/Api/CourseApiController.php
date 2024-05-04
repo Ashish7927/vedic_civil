@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\LessonComplete;
 use App\Models\CourseAuthenticationToken;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
@@ -86,10 +87,24 @@ class CourseApiController extends Controller
         return response()->json($response, 200);
     }
 
+    public function getFreeCourses()
+    {
+        $courses = Course::where('type', '1')->where('price','0')->with('user')->latest()->get();
+
+        $response = [
+            'success' => true,
+            'data' => $courses,
+            'total' => count($courses),
+            'message' => 'Getting Free Courses Data',
+        ];
+        return response()->json($response, 200);
+    }
+
     public function getCoursesRequiredDetails(Request $request)
     {
-        $checkToken = CourseAuthenticationToken::where('api_token', request()->bearerToken())->first();
-        if(isset($checkToken->user_id)){
+        $user=User::find($request->user_id);
+        
+        if(isset($user->user_id)){
             if (!isset($request->course_id)) {
                 $response = [
                     'success' => false,
@@ -119,15 +134,15 @@ class CourseApiController extends Controller
                         'lesson' => $lessons
                     ];
 
-                    $check_enrolled = CourseEnrolled::where('user_id', $checkToken->user_id)->where('course_id', $request->course_id)->first();
+                    // $check_enrolled = CourseEnrolled::where('user_id', $checkToken->user_id)->where('course_id', $request->course_id)->first();
 
-                    if ($check_enrolled == null) {
-                        $enroll = new CourseEnrolled();
-                        $enroll->user_id = $checkToken->user_id;
-                        $enroll->course_id = $request->course_id;
-                        $enroll->purchase_price = $courses->discount_price != null ? $courses->discount_price : $courses->price;
-                        $enroll->save();
-                    }
+                    // if ($check_enrolled == null) {
+                    //     $enroll = new CourseEnrolled();
+                    //     $enroll->user_id = $request->user_id;
+                    //     $enroll->course_id = $request->course_id;
+                    //     $enroll->purchase_price = $courses->discount_price != null ? $courses->discount_price : $courses->price;
+                    //     $enroll->save();
+                    // }
 
                     $check_enrolled_users = CourseEnrolled::where('course_id', $request->course_id)->with('user')->first();
 
@@ -172,8 +187,7 @@ class CourseApiController extends Controller
 
     public function getCoursesProgressUpdate(Request $request)
     {
-        $checkToken = CourseAuthenticationToken::where('api_token', request()->bearerToken())->first();
-        if(isset($checkToken->user_id)){
+        if(isset($request->user_id)){
             if (!isset($request->course_id) || !isset($request->lesson_id)) {
                 $response = [
                     'success' => false,
@@ -183,10 +197,10 @@ class CourseApiController extends Controller
                 ];
             } else {
                 $lesson = Lesson::where("course_id", $request->course_id)->where('id',$request->lesson_id)->first();
-                $checkLessonComplete = LessonComplete::where('course_id', $request->course_id)->where('lesson_id', $request->lesson_id)->where('user_id', $checkToken->user_id)->first();
+                $checkLessonComplete = LessonComplete::where('course_id', $request->course_id)->where('lesson_id', $request->lesson_id)->where('user_id', $request->user_id)->first();
                 if ($checkLessonComplete == null) {
                     $lessonComplete = new LessonComplete();
-                    $lessonComplete->user_id = $checkToken->user_id;
+                    $lessonComplete->user_id = $request->user_id;
                     $lessonComplete->course_id = $lesson->course_id;
                     $lessonComplete->lesson_id = $lesson->id;
                     $lessonComplete->status = 1;
@@ -195,10 +209,10 @@ class CourseApiController extends Controller
 
 
                 $lessonCount = Lesson::where('course_id', $request->course_id)->count();
-                $lessonCompleteCount = LessonComplete::where('course_id', $request->course_id)->where('user_id', $checkToken->user_id)->count();
+                $lessonCompleteCount = LessonComplete::where('course_id', $request->course_id)->where('user_id', $request->user_id)->count();
                 if ($lessonCount == $lessonCompleteCount) {
-                    CourseEnrolled::where("user_id", $checkToken->user_id)->where('course_id', $request->course_id)->update(['is_completed' => 1]);
-                    CourseEnrolled::where("user_id", $checkToken->user_id)->where('course_id', $request->course_id)->update(['completion_date' => date("Y-m-d H:i:s")]);
+                    CourseEnrolled::where("user_id", $request->user_id)->where('course_id', $request->course_id)->update(['is_completed' => 1]);
+                    CourseEnrolled::where("user_id", $request->user_id)->where('course_id', $request->course_id)->update(['completion_date' => date("Y-m-d H:i:s")]);
                 }
 
                 $response = [
@@ -485,12 +499,12 @@ class CourseApiController extends Controller
      * "message": "Getting Quiz Data"
      * }
      */
-    public function getQuizDetails($id)
+    public function getQuizDetails($quiz_id)
     {
         $relation = ['user', 'comments', 'comments.user', 'quiz', 'quiz.assign', 'quiz.assign.questionBank', 'quiz.assign.questionBank.questionMu'];
 
 
-        $course = Course::with($relation)->find($id);
+        $course = Course::with($relation)->find($quiz_id);
         $reviews = DB::table('course_reveiws')
             ->select(
                 'course_reveiws.id',
@@ -502,7 +516,7 @@ class CourseApiController extends Controller
                 'users.image as userImage',
             )
             ->join('users', 'users.id', '=', 'course_reveiws.user_id')
-            ->where('course_reveiws.course_id', $id)->get();
+            ->where('course_reveiws.course_id', $quiz_id)->get();
 
         $course->reviews = $reviews;
 

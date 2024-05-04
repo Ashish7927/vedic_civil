@@ -45,6 +45,31 @@ use App\Models\HrdcPayout;
  */
 class WebsiteApiController extends Controller
 {
+
+    public function homePage()
+    {
+
+        try {
+
+                $response = [
+                    'success' => true,
+                    'message' => 'Getting Home info',
+                    'banner' => array(),
+                    'banner2' => array(),
+                    'learn_course' => array(),
+                    'weekly_best_seller' => array(),
+                ];
+
+            return response()->json($response, 200);
+        } catch (\Exception $exception) {
+            $response = [
+                'success' => false,
+                'message' => $exception->getMessage()
+            ];
+            return response()->json($response, 500);
+        }
+    }
+
     /**
      * Cart List
      * @response {
@@ -141,12 +166,12 @@ class WebsiteApiController extends Controller
      *
      */
 
-    public function cartList()
+    public function cartList($user_id)
     {
 
         try {
 
-            $carts = Cart::where('user_id', Auth::id())->with('course', 'course.user')->get();
+            $carts = Cart::where('user_id', $user_id)->with('course', 'course.user')->get();
 
             if (count($carts) != 0) {
                 $response = [
@@ -157,6 +182,7 @@ class WebsiteApiController extends Controller
             } else {
                 $response = [
                     'success' => false,
+                    'id'=>Auth::id(),
                     'message' => 'Cart is empty ',
                 ];
             }
@@ -181,10 +207,11 @@ class WebsiteApiController extends Controller
      * }
      */
 
-    public function addToCart($id)
+    public function addToCart(Request $request)
     {
         try {
-            $user = Auth::user();
+            $user = user::find($request->user_id);
+            $id = $request->course_id;
             if (Auth::check() && ($user->role_id != 1)) {
 
                 $exist = Cart::where('user_id', $user->id)->where('course_id', $id)->first();
@@ -211,7 +238,6 @@ class WebsiteApiController extends Controller
                             $cart->price = $course->price;
                         }
                         $cart->save();
-
                     } else {
 
                         $course = Course::find($id);
@@ -231,7 +257,6 @@ class WebsiteApiController extends Controller
                     $message = 'Course Added to your cart';
                     $success = true;
                 }
-
             } //If user not logged in then cart added into session
 
             else {
@@ -251,7 +276,6 @@ class WebsiteApiController extends Controller
             ];
             return response()->json($response, 500);
         }
-
     }
 
     /**
@@ -267,8 +291,6 @@ class WebsiteApiController extends Controller
     {
 
         try {
-
-            if (Auth::check()) {
                 $item = Cart::find($id);
                 if ($item) {
                     $item->delete();
@@ -278,11 +300,6 @@ class WebsiteApiController extends Controller
                     $success = false;
                     $message = 'Something went wrong';
                 }
-
-            } else {
-                $success = false;
-                $message = 'Something went wrong';
-            }
 
             $response = [
                 'success' => $success,
@@ -343,7 +360,6 @@ class WebsiteApiController extends Controller
                         'message' => "Already used this coupon",
                     ];
                     return response()->json($response, 200);
-
                 }
 
                 if ($total >= $min_purchase) {
@@ -369,7 +385,7 @@ class WebsiteApiController extends Controller
                             ], 200);
                         }
                     } elseif ($coupon->category == 3) {
-//                        dd();
+                        //                        dd();
                         if ($coupon->coupon_user_id != $checkout->user_id) {
                             return response()->json([
                                 'error' => "This coupon not for you.",
@@ -378,7 +394,7 @@ class WebsiteApiController extends Controller
                         } else {
                             $couponApply = true;
                         }
-//                        $couponApply=true;
+                        //                        $couponApply=true;
                     }
 
                     $final = $total;
@@ -396,7 +412,6 @@ class WebsiteApiController extends Controller
                                 $final = ($total - $discount);
                                 $checkout->discount = $discount;
                                 $checkout->purchase_price = $final;
-
                             }
                         } else {
 
@@ -433,7 +448,6 @@ class WebsiteApiController extends Controller
                         'message' => "Coupon Successful Applied",
                     ];
                     return response()->json($response, 200);
-
                 } else {
 
                     $response = [
@@ -441,18 +455,14 @@ class WebsiteApiController extends Controller
                         'message' => "Coupon Minimum Purchase Does Not Match",
                     ];
                     return response()->json($response, 200);
-
                 }
-
             } else {
                 $response = [
                     'success' => false,
                     'message' => "Invalid Coupon",
                 ];
                 return response()->json($response, 200);
-
             }
-
         } catch (\Exception $e) {
             $response = [
                 'success' => false,
@@ -460,8 +470,6 @@ class WebsiteApiController extends Controller
             ];
             return response()->json($response, 500);
         }
-
-
     }
 
 
@@ -511,10 +519,10 @@ class WebsiteApiController extends Controller
      * "message": "Getting Courses Data"
      * }
      */
-    public function myCourses()
+    public function myCourses($user_id)
     {
         try {
-            $courses = CourseEnrolled::where('course_enrolleds.user_id', Auth::user()->id)
+            $courses = CourseEnrolled::where('course_enrolleds.user_id', $user_id)
                 ->leftjoin('courses', 'courses.id', 'course_enrolleds.course_id')
                 ->where('courses.type', 1)
                 ->select('courses.*')
@@ -645,7 +653,8 @@ class WebsiteApiController extends Controller
 
         try {
 
-            $user = Auth::user();
+            $user = user::find($request->user_id);
+            if($user){
             $user->name = $request->name;
             $user->email = $request->email;
             $user->phone = $request->phone;
@@ -674,6 +683,13 @@ class WebsiteApiController extends Controller
                 'message' => "Profile has been updated",
             ];
             return response()->json($response, 200);
+        }else{
+            $response = [
+                'success' => false,
+                'message' => "User not found!",
+            ];
+            return response()->json($response, 200);
+        }
         } catch (\Exception $e) {
             $response = [
                 'success' => false,
@@ -705,7 +721,7 @@ class WebsiteApiController extends Controller
         try {
             $user_id = Auth::user()->id;
             $review = CourseReveiw::where('user_id', $user_id)->where('course_id', $request->course_id)->first();
-// return $review;
+            // return $review;
             if (is_null($review)) {
                 $newReview = new CourseReveiw();
                 $newReview->user_id = $user_id;
@@ -728,7 +744,7 @@ class WebsiteApiController extends Controller
                 // $notification->course_review_id = $newReview->id;
                 // $notification->save();
 
-                if (UserEmailNotificationSetup('Course_Review',$course->user)) {
+                if (UserEmailNotificationSetup('Course_Review', $course->user)) {
                     send_email($course->user, 'Course_Review', [
                         'time' => Carbon::now()->format('d-M-Y ,s:i A'),
                         'course' => $course->title,
@@ -736,16 +752,19 @@ class WebsiteApiController extends Controller
                         'star' => $newReview->star,
                     ]);
                 }
-                if (UserBrowserNotificationSetup('Course_Review',$course->user)) {
+                if (UserBrowserNotificationSetup('Course_Review', $course->user)) {
 
-                    send_browser_notification($course->user, $type = 'Course_Review', $shortcodes = [
-                        'time' => Carbon::now()->format('d-M-Y ,s:i A'),
-                        'course' => $course->title,
-                        'review' => $newReview->comment,
-                        'star' => $newReview->star,
-                    ],
-                        '',//actionText
-                        ''//actionUrl
+                    send_browser_notification(
+                        $course->user,
+                        $type = 'Course_Review',
+                        $shortcodes = [
+                            'time' => Carbon::now()->format('d-M-Y ,s:i A'),
+                            'course' => $course->title,
+                            'review' => $newReview->comment,
+                            'star' => $newReview->star,
+                        ],
+                        '', //actionText
+                        '' //actionUrl
                     );
                 }
                 $success = true;
@@ -767,7 +786,6 @@ class WebsiteApiController extends Controller
             ];
             return response()->json($response, 500);
         }
-
     }
 
     /**
@@ -783,7 +801,7 @@ class WebsiteApiController extends Controller
     public function comment(Request $request)
     {
         $this->validate($request, [
-           // 'comment' => 'required',
+            // 'comment' => 'required',
             'course_id' => 'required',
         ]);
 
@@ -808,22 +826,25 @@ class WebsiteApiController extends Controller
                 // $notification->save();
 
 
-                if (UserEmailNotificationSetup('Course_comment',$course->user)) {
+                if (UserEmailNotificationSetup('Course_comment', $course->user)) {
                     send_email($course->user, 'Course_comment', [
                         'time' => Carbon::now()->format('d-M-Y ,s:i A'),
                         'course' => $course->title,
                         'comment' => $comment->comment,
                     ]);
                 }
-                if (UserBrowserNotificationSetup('Course_comment',$course->user)) {
+                if (UserBrowserNotificationSetup('Course_comment', $course->user)) {
 
-                    send_browser_notification($course->user, $type = 'Course_comment', $shortcodes = [
-                        'time' => Carbon::now()->format('d-M-Y ,s:i A'),
-                        'course' => $course->title,
-                        'comment' => $comment->comment,
-                    ],
-                        '',//actionText
-                        ''//actionUrl
+                    send_browser_notification(
+                        $course->user,
+                        $type = 'Course_comment',
+                        $shortcodes = [
+                            'time' => Carbon::now()->format('d-M-Y ,s:i A'),
+                            'course' => $course->title,
+                            'comment' => $comment->comment,
+                        ],
+                        '', //actionText
+                        '' //actionUrl
                     );
                 }
 
@@ -845,7 +866,6 @@ class WebsiteApiController extends Controller
             ];
             return response()->json($response, 500);
         }
-
     }
 
     /**
@@ -881,7 +901,7 @@ class WebsiteApiController extends Controller
                 $comment->save();
 
 
-                if (UserEmailNotificationSetup('Course_comment_Reply',$course->user)) {
+                if (UserEmailNotificationSetup('Course_comment_Reply', $course->user)) {
                     send_email($course->user, 'Course_comment_Reply', [
                         'time' => Carbon::now()->format('d-M-Y ,s:i A'),
                         'course' => $course->title,
@@ -889,16 +909,19 @@ class WebsiteApiController extends Controller
                         'reply' => $comment->reply,
                     ]);
                 }
-                if (UserBrowserNotificationSetup('Course_comment_Reply',$course->user)) {
+                if (UserBrowserNotificationSetup('Course_comment_Reply', $course->user)) {
 
-                    send_browser_notification($course->user, $type = 'Course_comment_Reply', $shortcodes = [
-                        'time' => Carbon::now()->format('d-M-Y ,s:i A'),
-                        'course' => $course->title,
-                        'comment' => $comment->comment,
-                        'reply' => $comment->reply,
-                    ],
-                        '',//actionText
-                        ''//actionUrl
+                    send_browser_notification(
+                        $course->user,
+                        $type = 'Course_comment_Reply',
+                        $shortcodes = [
+                            'time' => Carbon::now()->format('d-M-Y ,s:i A'),
+                            'course' => $course->title,
+                            'comment' => $comment->comment,
+                            'reply' => $comment->reply,
+                        ],
+                        '', //actionText
+                        '' //actionUrl
                     );
                 }
 
@@ -921,7 +944,6 @@ class WebsiteApiController extends Controller
             ];
             return response()->json($response, 500);
         }
-
     }
 
 
@@ -961,16 +983,11 @@ class WebsiteApiController extends Controller
          }*/
 
         try {
-            $profile = Auth::user();
-            $tracking = Cart::where('user_id', Auth::id())->first()->tracking;
-            if ($profile->role_id == 3) {
-                /* if (isSubscribe()) {
-                     $total = 0;
-                 } else {
-                     $total = Cart::where('user_id', Auth::user()->id)->sum('price');
-                 }*/
-                $total = Cart::where('user_id', Auth::user()->id)->sum('price');
-            }
+            $profile = user::find($request->user_id);
+
+            $tracking = Cart::where('user_id', $request->user_id)->first()->tracking;
+
+                $total = Cart::where('user_id', $request->user_id)->sum('price');
 
             $checkout = Checkout::where('tracking', $tracking)->where('user_id', Auth::id())->latest()->first();
             if (!$checkout) {
@@ -983,32 +1000,30 @@ class WebsiteApiController extends Controller
                 $checkout->status = 0;
                 $checkout->save();
             }
+            $bill = BillingDetails::where('user_id', $request->user_id)->first();
 
-
-            if ($request->billing_address == 'new') {
+            if ($bill) {
                 $bill = BillingDetails::where('tracking_id', $tracking)->first();
 
                 if (empty($bill)) {
                     $bill = new BillingDetails();
                 }
 
-                $bill->user_id = Auth::id();
+                $bill->user_id = $request->user_id;
                 $bill->tracking_id = $tracking;
-                $bill->first_name = $request->first_name;
-                $bill->last_name = $request->last_name;
-                $bill->company_name = $request->company_name;
-                $bill->country = $request->country;
-                $bill->address1 = $request->address1;
-                $bill->address2 = $request->address2;
-                $bill->city = $request->city;
-                $bill->zip_code = $request->zip_code;
-                $bill->phone = $request->phone;
-                $bill->email = $request->email;
-                $bill->details = $request->details;
+                $bill->first_name = $profile->name;
+                $bill->last_name = $profile->name;
+                $bill->company_name = '';
+                $bill->country = $profile->country;
+                $bill->address1 = $profile->address;
+                $bill->address2 = $profile->address;
+                $bill->city = $profile->city;
+                $bill->zip_code = $profile->zip;
+                $bill->phone = $profile->phone;
+                $bill->email = $profile->email;
+                $bill->details = '';
                 $bill->payment_method = null;
                 $bill->save();
-            } else {
-                $bill = BillingDetails::where('id', $request->old_billing)->first();
             }
 
             $checkout_info = $checkout;
@@ -1027,7 +1042,6 @@ class WebsiteApiController extends Controller
                         $payment = new PaymentController();
                         $payment->directEnroll($cart->course_id, $checkout_info->tracking);
                         $cart->delete();
-
                     }
 
 
@@ -1044,7 +1058,6 @@ class WebsiteApiController extends Controller
                         'message' => 'Operation successful. Go to Payment page'
                     ];
                     return response()->json($response, 200);
-
                 }
             } else {
                 $response = [
@@ -1059,7 +1072,6 @@ class WebsiteApiController extends Controller
                 'message' => $e->getMessage()
             ];
             return response()->json($response, 500);
-
         }
     }
 
@@ -1073,7 +1085,7 @@ class WebsiteApiController extends Controller
      * "message": "Successfully Done"
      * }
      */
-    public static function payWithGateWay(Request $request, $gateWayName)
+    public static function payWithGateWay(Request $request)
     {
         try {
             if (isset($request->response)) {
@@ -1081,29 +1093,12 @@ class WebsiteApiController extends Controller
             } else {
                 $response = null;
             }
+        $user = user::find($request->user_id);
 
-
-            if (Auth::check()) {
-                $user = Auth::user();
+            if ($user) {
                 $track = Cart::where('user_id', $user->id)->first()->tracking;
-                $total = Cart::where('user_id', Auth::user()->id)->sum('price');
+                $total = Cart::where('user_id', $user->id)->sum('price');
                 $checkout_info = Checkout::where('tracking', $track)->where('user_id', $user->id)->latest()->first();
-
-                if ($gateWayName == "Wallet") {
-                    if ($user->balance < $checkout_info->purchase_price) {
-
-                        $response = [
-                            'success' => false,
-                            'message' => 'Insufficient balance'
-                        ];
-                        return response()->json($response, 200);
-                    } else {
-                        $newBal = ($user->balance - $checkout_info->purchase_price);
-                        $user->balance = $newBal;
-                        $user->save();
-
-                    }
-                }
 
 
                 if (isset($checkout_info)) {
@@ -1120,9 +1115,9 @@ class WebsiteApiController extends Controller
                         $course->total_enrolled = ($enrolled + 1);
 
                         //==========================Start Referral========================
-                        $purchase_history = CourseEnrolled::where('user_id', Auth::user()->id)->first();
-                        $referral_check = UserWiseCoupon::where('invite_accept_by', Auth::user()->id)->where('category_id', null)->where('course_id', null)->first();
-                        $referral_settings = UserWiseCouponSetting::where('role_id', Auth::user()->role_id)->first();
+                        $purchase_history = CourseEnrolled::where('user_id', $user->id)->first();
+                        $referral_check = UserWiseCoupon::where('invite_accept_by', $user->id)->where('category_id', null)->where('course_id', null)->first();
+                        $referral_settings = UserWiseCouponSetting::where('role_id', $user->role_id)->first();
 
                         if ($purchase_history == null && $referral_check != null) {
                             $referral_check->category_id = $course->category_id;
@@ -1225,7 +1220,7 @@ class WebsiteApiController extends Controller
 
 
 
-                        if (UserEmailNotificationSetup('Course_Enroll_Payment',$checkout_info->user)) {
+                        if (UserEmailNotificationSetup('Course_Enroll_Payment', $checkout_info->user)) {
                             send_email($checkout_info->user, 'Course_Enroll_Payment', [
                                 'time' => \Illuminate\Support\Carbon::now()->format('d-M-Y ,s:i A'),
                                 'course' => $course->title,
@@ -1235,21 +1230,24 @@ class WebsiteApiController extends Controller
                                 'gateway' => 'Sslcommerz',
                             ]);
                         }
-                        if (UserBrowserNotificationSetup('Course_Enroll_Payment',$checkout_info->user)) {
+                        if (UserBrowserNotificationSetup('Course_Enroll_Payment', $checkout_info->user)) {
 
-                            send_browser_notification($checkout_info->user, $type = 'Course_Enroll_Payment', $shortcodes = [
-                                'time' => \Illuminate\Support\Carbon::now()->format('d-M-Y ,s:i A'),
-                                'course' => $course->title,
-                                'currency' => $checkout_info->user->currency->symbol ?? '$',
-                                'price' => ($checkout_info->user->currency->conversion_rate * $cart->price),
-                                'instructor' => $course->user->name,
-                                'gateway' => 'Sslcommerz',
-                            ],
-                                '',//actionText
-                                ''//actionUrl
+                            send_browser_notification(
+                                $checkout_info->user,
+                                $type = 'Course_Enroll_Payment',
+                                $shortcodes = [
+                                    'time' => \Illuminate\Support\Carbon::now()->format('d-M-Y ,s:i A'),
+                                    'course' => $course->title,
+                                    'currency' => $checkout_info->user->currency->symbol ?? '$',
+                                    'price' => ($checkout_info->user->currency->conversion_rate * $cart->price),
+                                    'instructor' => $course->user->name,
+                                    'gateway' => 'Sslcommerz',
+                                ],
+                                '', //actionText
+                                '' //actionUrl
                             );
                         }
-                        if (UserEmailNotificationSetup('Enroll_notify_Instructor',$instractor)) {
+                        if (UserEmailNotificationSetup('Enroll_notify_Instructor', $instractor)) {
                             send_email($instractor, 'Enroll_notify_Instructor', [
                                 'time' => Carbon::now()->format('d-M-Y ,s:i A'),
                                 'course' => $course->title,
@@ -1258,17 +1256,20 @@ class WebsiteApiController extends Controller
                                 'rev' => @$reveune,
                             ]);
                         }
-                        if (UserBrowserNotificationSetup('Enroll_notify_Instructor',$instractor)) {
+                        if (UserBrowserNotificationSetup('Enroll_notify_Instructor', $instractor)) {
 
-                            send_browser_notification($instractor, $type = 'Enroll_notify_Instructor', $shortcodes = [
-                                'time' => Carbon::now()->format('d-M-Y ,s:i A'),
-                                'course' => $course->title,
-                                'currency' => $instractor->currency->symbol ?? '$',
-                                'price' => ($instractor->currency->conversion_rate * $cart->price),
-                                'rev' => @$reveune,
-                            ],
-                                '',//actionText
-                                ''//actionUrl
+                            send_browser_notification(
+                                $instractor,
+                                $type = 'Enroll_notify_Instructor',
+                                $shortcodes = [
+                                    'time' => Carbon::now()->format('d-M-Y ,s:i A'),
+                                    'course' => $course->title,
+                                    'currency' => $instractor->currency->symbol ?? '$',
+                                    'price' => ($instractor->currency->conversion_rate * $cart->price),
+                                    'rev' => @$reveune,
+                                ],
+                                '', //actionText
+                                '' //actionUrl
                             );
                         }
 
@@ -1279,18 +1280,9 @@ class WebsiteApiController extends Controller
 
                         $course->save();
 
-                        // $notification = new Notification();
-                        // $notification->author_id = $course->user_id;
-                        // $notification->user_id = $checkout_info->user->id;
-                        // $notification->course_id = $course->id;
-                        // $notification->course_enrolled_id = $enroll->id;
-                        // $notification->status = 0;
-
-                        // $notification->save();
-
                     }
 
-                    $checkout_info->payment_method = $gateWayName;
+                    $checkout_info->payment_method = 'online';
                     $checkout_info->status = 1;
                     $checkout_info->response = json_encode($response);
                     $checkout_info->save();
@@ -1309,7 +1301,6 @@ class WebsiteApiController extends Controller
                         'message' => 'Operation successful.'
                     ];
                     return response()->json($response, 200);
-
                 } else {
                     $response = [
                         'success' => false,
@@ -1317,7 +1308,6 @@ class WebsiteApiController extends Controller
                     ];
                     return response()->json($response, 500);
                 }
-
             } else {
                 $response = [
                     'success' => false,
@@ -1325,15 +1315,12 @@ class WebsiteApiController extends Controller
                 ];
                 return response()->json($response, 500);
             }
-
-
         } catch (\Exception $e) {
             $response = [
                 'success' => false,
                 'message' => $e->getMessage()
             ];
             return response()->json($response, 500);
-
         }
     }
 
@@ -1388,14 +1375,12 @@ class WebsiteApiController extends Controller
                 'message' => "Operation successful"
             ];
             return response()->json($response, 200);
-
         } catch (\Exception $e) {
             $response = [
                 'success' => false,
                 'message' => "Operation Failed!"
             ];
             return response()->json($response, 200);
-
         }
     }
 
@@ -1486,7 +1471,6 @@ class WebsiteApiController extends Controller
                 'message' => "Operation Failed!"
             ];
             return response()->json($response, 200);
-
         }
     }
 
@@ -1520,7 +1504,6 @@ class WebsiteApiController extends Controller
                 'message' => "Operation Failed!"
             ];
             return response()->json($response, 200);
-
         }
     }
 
@@ -1555,7 +1538,6 @@ class WebsiteApiController extends Controller
                 'message' => "Operation Failed!"
             ];
             return response()->json($response, 200);
-
         }
     }
 
@@ -1591,7 +1573,6 @@ class WebsiteApiController extends Controller
                 'message' => "Operation Failed!"
             ];
             return response()->json($response, 200);
-
         }
     }
 
@@ -1648,7 +1629,6 @@ class WebsiteApiController extends Controller
                 'message' => "Operation Failed!"
             ];
             return response()->json($response, 200);
-
         }
     }
 
@@ -1688,7 +1668,6 @@ class WebsiteApiController extends Controller
             ];
             return response()->json($response, 200);
         }
-
     }
 
 
@@ -1718,13 +1697,11 @@ class WebsiteApiController extends Controller
                 'message' => "Operation successful"
             ];
             return response()->json($response, 200);
-
         } catch (\Exception $e) {
 
 
             return response()->json($e, 200);
         }
-
     }
 
     public function getBbbMeetingUrl($meeting_id, $user_name)
@@ -1739,7 +1716,6 @@ class WebsiteApiController extends Controller
                 $status = 'Not running';
             } else {
                 $status = 'running';
-
             }
             $url = Bigbluebutton::start([
                 'meetingID' => $meeting_id,
@@ -1752,18 +1728,16 @@ class WebsiteApiController extends Controller
         } catch (\Exception $e) {
             return null;
         }
-
-
     }
 
-    public function quizStart($courseId, $quizId)
+    public function quizStart(Request $request)
     {
         try {
-            $userId = Auth::id();
+            $userId = $request->user_id;
             $quiz = new QuizTest();
             $quiz->user_id = $userId;
-            $quiz->course_id = $courseId;
-            $quiz->quiz_id = $quizId;
+            $quiz->course_id = $request->user_id;
+            $quiz->quiz_id = $request->quiz_id;
             $quiz->quiz_type = 2;
             $quiz->start_at = now();
             $quiz->end_at = null;
@@ -1773,7 +1747,6 @@ class WebsiteApiController extends Controller
 
             $return['result'] = true;
             $return['data'] = $quiz;
-
         } catch (\Exception $e) {
             $return['result'] = true;
             $return['data'] = null;
@@ -1786,11 +1759,11 @@ class WebsiteApiController extends Controller
     {
 
         try {
-//            parameters
-//            type -> String example:M
-//            assign_id -> integer
-//            quiz_test_id -> integer
-//            ans ->array
+            //            parameters
+            //            type -> String example:M
+            //            assign_id -> integer
+            //            quiz_test_id -> integer
+            //            ans ->array
             $answer = $request->ans;
             $type = $request->get('type');
             $assign_id = $request->get('assign_id');
@@ -1858,7 +1831,6 @@ class WebsiteApiController extends Controller
                     }
                     $quizDetails->save();
                 }
-
             } else {
 
                 $quizDetails->quiz_test_id = $quiz_test_id;
@@ -1871,7 +1843,6 @@ class WebsiteApiController extends Controller
             }
 
             return true;
-
         } catch (\Exception $e) {
             return false;
         }
@@ -1879,9 +1850,9 @@ class WebsiteApiController extends Controller
 
     public function finalQusSubmit(Request $request)
     {
-//        quiz_test_id
+        //        quiz_test_id
         //type
-        $userId = Auth::id();
+        $userId = $request->user_id;
         $quiz_test = QuizTest::with('quiz', 'details')->find($request->quiz_test_id);
 
         if ($quiz_test->quiz_id) {
@@ -1919,9 +1890,9 @@ class WebsiteApiController extends Controller
         return true;
     }
 
-    public function quizResults()
+    public function quizResults($user_id)
     {
-        $quiz = QuizTest::with('quiz')->where('user_id', Auth::user()->id)->get();
+        $quiz = QuizTest::with('quiz')->where('user_id',$user_id)->get();
 
         $response = [
             'success' => true,
@@ -1931,9 +1902,9 @@ class WebsiteApiController extends Controller
         return $response;
     }
 
-    public function quizResult($course_id, $quiz_id)
+    public function quizResult(Request $request)
     {
-        $quizzes = QuizTest::with('quiz', 'details')->where('course_id', $course_id)->where('quiz_id', $quiz_id)->get();
+        $quizzes = QuizTest::with('quiz', 'details')->where('course_id', $request->course_id)->where('quiz_id', $request->quiz_id)->get();
 
 
         foreach ($quizzes as $key => $i) {
@@ -1950,7 +1921,6 @@ class WebsiteApiController extends Controller
                         $score += $test->mark ?? 1;
                         $totalCorrect++;
                     }
-
                 }
             }
 
@@ -1972,7 +1942,6 @@ class WebsiteApiController extends Controller
             $i->save();
 
             $i->result = $preResult;
-
         }
 
         $response = [
@@ -2068,20 +2037,23 @@ class WebsiteApiController extends Controller
                     $this->getCertificateRecord($course->id);
 
 
-                    if (UserEmailNotificationSetup('Complete_Course',Auth::user())) {
+                    if (UserEmailNotificationSetup('Complete_Course', Auth::user())) {
                         send_email(Auth::user(), 'Complete_Course', [
                             'time' => Carbon::now()->format('d-M-Y ,s:i A'),
                             'course' => $course->title
                         ]);
                     }
-                    if (UserBrowserNotificationSetup('Complete_Course',Auth::user())) {
+                    if (UserBrowserNotificationSetup('Complete_Course', Auth::user())) {
 
-                        send_browser_notification(Auth::user(), $type = 'Complete_Course', $shortcodes = [
-                            'time' => Carbon::now()->format('d-M-Y ,s:i A'),
-                            'course' => $course->title
-                        ],
-                            '',//actionText
-                            ''//actionUrl
+                        send_browser_notification(
+                            Auth::user(),
+                            $type = 'Complete_Course',
+                            $shortcodes = [
+                                'time' => Carbon::now()->format('d-M-Y ,s:i A'),
+                                'course' => $course->title
+                            ],
+                            '', //actionText
+                            '' //actionUrl
                         );
                     }
                 }
@@ -2092,13 +2064,8 @@ class WebsiteApiController extends Controller
                 'message' => "Lesson complete successfully"
             ];
             return $response;
-
         } catch (\Exception $e) {
             return false;
         }
-
     }
 }
-
-
-

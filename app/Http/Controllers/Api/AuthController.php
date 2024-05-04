@@ -31,7 +31,6 @@ class AuthController extends Controller
 
     public function signup(Request $request)
     {
-
         try {
             $rules = [
                 'name' => 'required|string|max:255',
@@ -66,6 +65,9 @@ class AuthController extends Controller
                     'phone' => $request->phone ?? null,
                     'username' => $request->email,
                     'otp' => $otp,
+                    'dob' => $request->dob,
+                    'gender' => $request->gender,
+                    'country' => $request->country,
                     'password' => bcrypt($request->password)
                 ]);
 
@@ -130,8 +132,25 @@ class AuthController extends Controller
                 ], 401);
 
             $user = $request->user();
+            $tokenResult = $user->createToken('Personal Access Token');
+           $token = $tokenResult->token;
+            if ($request->remember_me)
+                $token->expires_at = Carbon::now()->addWeeks(1);
+            $result = $token->save();
 
-            if ($user) {
+            $data = [
+                'access_token' => $tokenResult->accessToken,
+                'token_type' => 'Bearer',
+                'is_verify' => $user->email_verified_at,
+                'expires_at' => Carbon::parse(
+                    $tokenResult->token->expires_at
+                )->toDateTimeString()
+            ];
+
+            if ($result) {
+                $request->merge([
+                    'api_token' => $token->id,
+                ]);
 
                 $check = $this->attemptUserCheck($request);
                 if (!$check['type']) {
@@ -145,6 +164,7 @@ class AuthController extends Controller
                     $response = [
                         'success' => true,
                         'data' => $user,
+                        'auth_data' =>$data,
                         'otp' => $otp,
                         'message' => 'Successfully login!',
                     ];
@@ -169,13 +189,14 @@ class AuthController extends Controller
     public function verifyOtp(Request $request)
     {
         $request->validate([
-            'otp' => 'required',
+            'phone_otp' => 'required',
+            'email_otp' => 'required',
             'user_id' => 'required'
         ]);
 
         $user = user::find($request->user_id);
         if ($user && $user != null) {
-            if ($user->otp == $request->otp) {
+            if ($user->otp == $request->phone_otp && $user->otp == $request->email_otp) {
                 $response = [
                     'success' => true,
                     'message' => 'Successfully logged in',

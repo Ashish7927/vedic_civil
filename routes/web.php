@@ -254,11 +254,19 @@ Route::group(['prefix' => 'subscription', 'middleware' => ['auth']], function ()
 
 });
 
+Route::get('/about_one', 'FrontendContoller@aboutOne')->name('aboutOne');
+Route::get('/contact_us', 'FrontendContoller@contactUs')->name('contactUs');
+Route::get('/course_one', 'FrontendContoller@courseOne')->name('courseOne');
+Route::get('/faq', 'FrontendContoller@faqPage')->name('faqPage');
+Route::get('/gallery_grid', 'FrontendContoller@galleryGrid')->name('galleryGrid');
+Route::get('/', 'FrontendContoller@indexPage')->name('indexPage');
+Route::get('/privacy_policy', 'FrontendContoller@privacyPolicy')->name('privacyPolicy');
+Route::get('/terms_condition', 'FrontendContoller@termsCondition')->name('termsCondition');
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/home', 'HomeController@index')->name('home');
     Route::get('dashboard', 'HomeController@dashboard')->name('dashboard')->middleware('RoutePermissionCheck:dashboard');
-    Route::get('/', 'HomeController@dashboard')->name('frontendHomePage');
+
     /* New - 23-3-2022 */
     Route::post('enroll-month-change', 'HomeController@enroll_month_change')->name('enroll_month_change')->middleware('RoutePermissionCheck:dashboard');
     Route::post('reg-month-change', 'HomeController@reg_month_change')->name('reg_month_change')->middleware('RoutePermissionCheck:dashboard');

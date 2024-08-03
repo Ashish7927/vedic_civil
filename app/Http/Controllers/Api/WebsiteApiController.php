@@ -210,7 +210,7 @@ class WebsiteApiController extends Controller
     public function addToCart(Request $request)
     {
         try {
-            $user = user::find($request->user_id);
+            $user = user::find(Auth::id());
             $id = $request->course_id;
             if (Auth::check() && ($user->role_id != 1)) {
 

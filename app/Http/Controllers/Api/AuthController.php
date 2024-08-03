@@ -108,6 +108,7 @@ class AuthController extends Controller
     {
         $otp = rand(100000, 999999);
         $user = user::find($user_id);
+        send_otp_sms($user->phone,$otp);
         $user->otp = $otp;
         $user->save();
         return $otp;
@@ -132,8 +133,9 @@ class AuthController extends Controller
                 ], 401);
 
             $user = $request->user();
+
             $tokenResult = $user->createToken('Personal Access Token');
-           $token = $tokenResult->token;
+            $token = $tokenResult->token;
             if ($request->remember_me)
                 $token->expires_at = Carbon::now()->addWeeks(1);
             $result = $token->save();
@@ -148,11 +150,13 @@ class AuthController extends Controller
             ];
 
             if ($result) {
+
                 $request->merge([
                     'api_token' => $token->id,
                 ]);
 
                 $check = $this->attemptUserCheck($request);
+
                 if (!$check['type']) {
                     $response = [
                         'success' => false,
@@ -169,6 +173,8 @@ class AuthController extends Controller
                         'message' => 'Successfully login!',
                     ];
                 }
+
+
             } else {
                 $response = [
                     'success' => false,

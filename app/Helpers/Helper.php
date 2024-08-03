@@ -59,6 +59,38 @@ if (!function_exists('send_smtp_mail')) {
     }
 }
 
+if (!function_exists('send_otp_sms')) {
+    function send_otp_sms($contact,$otp)
+    {
+        // if($type == 'otp'){
+        //     $url = 'https://pgapi.smartping.ai/fe/api/v1/send?username=vediccivil.trans&password=ri70J&unicode=false&from=VDCCVL&to='.$contact.'&dltPrincipalEntityId=1701171446261211078&dltContentId=1707171601452335408&text=Dear%20Student%2C%20'.$otp.'%20is%20your%20one-time%20password%20for%20login%20of%20Vedic%20civil%20.%20Please%20enter%20OTP%20to%20proceed.%20Thank%20you%2C%20vedic%20civil';
+        // }else{
+        //     $url = 'https://pgapi.smartping.ai/fe/api/v1/send?username=vediccivil.trans&password=ri70J&unicode=false&from=VDCCVL&to='.$contact.'&dltPrincipalEntityId=1701171446261211078&dltContentId=1707171601487451772&text=Dear%20jyoti%20tanjan%20%2C%20your%20order%20no%20AB1253%20and%20course%20name%20is%20abc%20purchased%20succussfully%20enjoy%20the%20learning%20Thank%20you.%20Vedic%20civil';
+        // }
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => 'https://pgapi.smartping.ai/fe/api/v1/send?username=vediccivil.trans&password=ri70J&unicode=false&from=VDCCVL&to='.$contact.'&dltPrincipalEntityId=1701171446261211078&dltContentId=1707171601452335408&text=Dear%20Student%2C%20'.$otp.'%20is%20your%20one-time%20password%20for%20login%20of%20Vedic%20civil%20.%20Please%20enter%20OTP%20to%20proceed.%20Thank%20you%2C%20vedic%20civil',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'GET',
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        $response = (array) json_decode($response);
+       if($response['statusCode'] == 200)
+       {
+        return true;
+       }else{
+        return false;
+       }
+    }
+}
 if (!function_exists('sendMailBySendGrid')) {
     function sendMailBySendGrid($config, $receiver_email, $receiver_name, $sender_email, $sender_name, $subject, $message)
     {

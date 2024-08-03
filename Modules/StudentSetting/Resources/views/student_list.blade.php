@@ -219,7 +219,7 @@
 
                                     </div>
                                     <div class="row">
-                                        <div class="col-xl-6">
+                                        {{-- <div class="col-xl-6">
                                             <div class="primary_input mb-15">
                                                 <label class="primary_input_label"
                                                     for="">{{ __('common.Date of Birth') }}
@@ -242,7 +242,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         <div class="col-xl-6">
                                             <div class="primary_input mb-25">
                                                 <label class="primary_input_label"
@@ -254,7 +254,7 @@
                                                     onkeypress="javascript:return isNumber(event)">
                                             </div>
                                         </div>
-                                    </div>
+                                    {{-- </div> --}}
                                     <input type="hidden" class="country_code" name="country_code" id="country_code"
                                         value="{{ old('country_code') }}" />
                                     <script type="text/javascript">
@@ -299,7 +299,7 @@
                                     </script>
                                     <?php } ?>
 
-                                    <div class="row">
+                                    {{-- <div class="row"> --}}
                                         <div class="col-xl-6">
                                             <div class="primary_input mb-25">
                                                 <label class="primary_input_label"
@@ -311,7 +311,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-xl-6">
+                                        {{-- <div class="col-xl-6">
                                             <div class="primary_input mb-35">
                                                 <label class="primary_input_label"
                                                     for="">{{ __('common.gender') }}
@@ -331,7 +331,7 @@
 
                                                 </select>
                                             </div>
-                                        </div>
+                                        </div> --}}
 
 
                                     </div>
@@ -502,7 +502,7 @@
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-xl-6">
+                                        {{-- <div class="col-xl-6">
                                             <div class="primary_input mb-15">
                                                 <label class="primary_input_label"
                                                     for="">{{ __('common.Date of Birth') }} </label>
@@ -525,7 +525,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         <div class="col-xl-6">
                                             <div class="primary_input mb-25">
                                                 <label class="primary_input_label"
@@ -578,8 +578,8 @@
                                             });
                                         </script>
                                         <?php } ?>
-                                    </div>
-                                    <div class="row">
+                                    {{-- </div>
+                                    <div class="row"> --}}
 
                                         <div class="col-xl-6">
                                             <div class="primary_input mb-25">
@@ -592,7 +592,7 @@
                                                     placeholder="-" type="email">
                                             </div>
                                         </div>
-                                        <div class="col-xl-6">
+                                        {{-- <div class="col-xl-6">
                                             <div class="primary_input mb-35">
                                                 <label class="primary_input_label"
                                                     for="">{{ __('common.gender') }}
@@ -610,7 +610,7 @@
 
                                                 </select>
                                             </div>
-                                        </div>
+                                        </div> --}}
 
                                         
                                     </div>
@@ -1098,7 +1098,7 @@
                                 </div>
                                
                                 <div class="row">
-                                    <div class="col-xl-6">
+                                    {{-- <div class="col-xl-6">
                                         <div class="primary_input mb-15">
                                             <label class="primary_input_label"
                                                 for="">{{ __('common.Date of Birth') }} </label>
@@ -1121,7 +1121,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <div class="col-xl-6">
                                         <div class="primary_input mb-25">
                                             <label class="primary_input_label" for="">{{ __('common.Phone') }}
@@ -1174,8 +1174,8 @@
                                         });
                                     </script>
                                     <?php } ?>
-                                </div>
-                                <div class="row">
+                                {{-- </div>
+                                <div class="row"> --}}
 
                                     <div class="col-xl-6">
                                         <div class="primary_input mb-25">
@@ -1187,7 +1187,7 @@
                                                 placeholder="-" type="email">
                                         </div>
                                     </div>
-                                    <div class="col-xl-6">
+                                    {{-- <div class="col-xl-6">
                                         <div class="primary_input mb-35">
                                             <label class="primary_input_label" for="">{{ __('common.gender') }}
                                             </label>
@@ -1204,7 +1204,7 @@
 
                                             </select>
                                         </div>
-                                    </div>
+                                    </div> --}}
 
                                     
                                 </div>

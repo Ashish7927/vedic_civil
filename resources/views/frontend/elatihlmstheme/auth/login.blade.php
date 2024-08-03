@@ -197,8 +197,8 @@
 
                         <div class="col-12 ">
                             <div class="remember_forgot_pass d-flex justify-content-between">
-                                <a href="{{ route('SendPasswordResetLink') }}"
-                                    class="forgot_pass">{{ __('common.Forgot Password ?') }}</a>
+                                {{-- <a href="{{ route('SendPasswordResetLink') }}"
+                                    class="forgot_pass">{{ __('common.Forgot Password ?') }}</a> --}}
                             </div>
                         </div>
 

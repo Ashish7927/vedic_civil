@@ -53,9 +53,9 @@ Route::group([
 
 
 
-    // Route::group([
-    //     'middleware' => ['auth:api', 'verified']
-    // ], function () {
+    Route::group([
+        'middleware' => ['auth:api', 'verified']
+    ], function () {
         //with login routes
 
         Route::any('lesson-complete', 'WebsiteApiController@lessonComplete')->name('api.lesson.complete');
@@ -105,5 +105,5 @@ Route::group([
 
 
         Route::post('learning-progress-update', 'PackageProgressApiController@storePackageProgress');
-    // });
+    });
 });

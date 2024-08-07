@@ -2,16 +2,10 @@
 
 namespace App\Providers;
 
-use App\Events\LastActivityEvent;
-use App\Events\OneToOneConnection;
-use App\Listeners\LastActivityListener;
-use App\Listeners\ListenOneToOneConnection;
+
 use App\Listeners\RevokeExistingTokens;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Laravel\Passport\Events\AccessTokenCreated;
-use Modules\Group\Listeners\GroupMemberCreateListener;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -21,16 +15,6 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        Registered::class => [
-            SendEmailVerificationNotification::class,
-        ],
-        OneToOneConnection::class => [
-            ListenOneToOneConnection::class,
-        ], LastActivityEvent::class => [
-            LastActivityListener::class,
-        ],  GroupMemberCreate::class =>[
-            GroupMemberCreateListener::class,
-        ],
         AccessTokenCreated::class => [
             RevokeExistingTokens::class,
         ],

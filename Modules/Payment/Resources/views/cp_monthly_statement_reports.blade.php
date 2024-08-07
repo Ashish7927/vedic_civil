@@ -34,7 +34,7 @@
                             @csrf
 
                             <div class="row">
-                                <div class="col-lg-4 mt-30">
+                                <div class="col-lg-4 mt-30" style="display:none;">
                                     <label class="primary_input_label" for="partner"> {{ __('Partner') }} </label>
                                     <select class="primary_select" name="partner" id="partner">
                                         <option data-display="{{ __('common.Select') }} {{ __('Partner') }}" value="">
@@ -47,7 +47,7 @@
                                     </select>
                                 </div>
 
-                                <div class="col-lg-4 mt-30">
+                                <div class="col-lg-4 mt-30" style="display:none;">
                                     <label class="primary_input_label" for="instructor"> {{ __('Content Provider') }} </label>
                                     <select class="primary_select" name="instructor" id="instructor">
                                         <option data-display="{{ __('common.Select') }} {{ __('Content Provider') }}" value="">

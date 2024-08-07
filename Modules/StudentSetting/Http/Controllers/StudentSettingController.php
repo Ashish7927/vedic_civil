@@ -66,20 +66,8 @@ class StudentSettingController extends Controller
             'name' => 'required',
             'phone' => 'nullable|string|regex:/^([0-9\s\-\+\(\)]*)$/|min:9|unique:users,phone',
             'email' => 'required|email|unique:users,email',
-            'password' => ['required', 'min:8', 'regex:/[a-z]/', 'regex:/[A-Z]/', 'regex:/[@$!%*#?&]/', 'confirmed'],
-            'dob' => 'required',
-            'citizenship' => 'required',
-            'race' => 'required',
-            'gender' => 'required',
-            'identification_number' => ['min:12', 'max:12']
+            'password' => ['required', 'min:8', 'regex:/[a-z]/', 'regex:/[A-Z]/', 'regex:/[@$!%*#?&]/', 'confirmed']
         ];
-
-        if (isModuleActive('Org')) {
-            $rules['position'] = 'required';
-            $rules['branch'] = 'required';
-            $rules['start_working_date'] = 'required';
-            $rules['employee_id'] = 'required';
-        }
 
         $this->validate($request, $rules, validationMessage($rules));
 
@@ -100,38 +88,10 @@ class StudentSettingController extends Controller
             } else {
                 $user->phone = $request->phone;
             }
-            $user->citizenship = $request->citizenship;
-            $user->race = $request->race;
             $user->employment_status = $request->employment_status;
-            $user->job_designation = $request->job_designation;
-            $user->business_nature = $request->business_nature;
-            $user->business_nature_other = $request->business_nature_other;
-            $user->sector = $request->sector;
             $user->highest_academic = $request->highest_academic;
             $user->current_residing = $request->current_residing;
-            $user->race_other = $request->race_other;
-            $user->sector_other = $request->sector_other;
-            $user->country_code = $request->country_code;
-            $user->nationality = $request->nationality;
-            $user->identification_number = $request->identification_number;
             $user->zip = $request->zip;
-
-
-            $user->dob = $request->dob;
-            $user->facebook = $request->facebook;
-            $user->twitter = $request->twitter;
-            $user->linkedin = $request->linkedin;
-            $user->youtube = $request->youtube;
-            $user->gender = $request->gender;
-
-            if (isModuleActive('Org')) {
-                $user->org_position_code = $request->position;
-                $branch = $request->branch;
-                $branch = explode('/', $branch);
-                $user->org_chart_code = end($branch);
-                $user->start_working_date = $request->start_working_date;
-                $user->employee_id = $request->employee_id;
-            }
 
             $user->language_id = Settings('language_id');
             $user->language_code = Settings('language_code');
@@ -148,83 +108,19 @@ class StudentSettingController extends Controller
             $user->referral = Str::random(10);
 
 
-            if ($request->file('image') != "") {
-                $file = $request->file('image');
-                $fileName = md5($file->getClientOriginalName() . time()) . "." . $file->getClientOriginalExtension();
-                $file->move('uploads/students/', $fileName);
-                $fileName = 'uploads/students/' . $fileName;
-                $user->image = $fileName;
-            }
+            // if ($request->file('image') != "") {
+            //     $file = $request->file('image');
+            //     $fileName = md5($file->getClientOriginalName() . time()) . "." . $file->getClientOriginalExtension();
+            //     $file->move('uploads/students/', $fileName);
+            //     $fileName = 'uploads/students/' . $fileName;
+            //     $user->image = $fileName;
+            // }
 
             $user->role_id = 3;
 
 
             $user->save();
-            if (Schema::hasTable('users') && Schema::hasTable('chat_statuses')) {
-                if (isModuleActive('Chat')) {
-                    userStatusChange($user->id, 0);
-                }
-            }
-            $mailchimpStatus = env('MailChimp_Status') ?? false;
-            $getResponseStatus = env('GET_RESPONSE_STATUS') ?? false;
-            $acelleStatus = env('ACELLE_STATUS') ?? false;
-            if (hasTable('newsletter_settings')) {
-                $setting = NewsletterSetting::getData();
 
-                if ($setting->student_status == 1) {
-                    $list = $setting->student_list_id;
-                    if ($setting->student_service == "Mailchimp") {
-
-                        if ($mailchimpStatus) {
-                            try {
-                                $MailChimp = new MailChimp(env('MailChimp_API'));
-                                $MailChimp->post("lists/$list/members", [
-                                    'email_address' => $user->email,
-                                    'status' => 'subscribed',
-                                ]);
-                            } catch (\Exception $e) {
-                            }
-                        }
-                    } elseif ($setting->student_service == "GetResponse") {
-                        if ($getResponseStatus) {
-
-                            try {
-                                $getResponse = new \GetResponse(env('GET_RESPONSE_API'));
-                                $getResponse->addContact(array(
-                                    'email' => $user->email,
-                                    'campaign' => array('campaignId' => $list),
-                                ));
-                            } catch (\Exception $e) {
-                            }
-                        }
-                    } elseif ($setting->instructor_service == "Acelle") {
-                        if ($acelleStatus) {
-
-                            try {
-                                $email = $user->email;
-                                $make_action_url = '/subscribers?list_uid=' . $list . '&EMAIL=' . $email;
-                                $acelleController = new AcelleController();
-                                $response = $acelleController->curlPostRequest($make_action_url);
-                            } catch (\Exception $e) {
-                            }
-                        }
-                    } elseif ($setting->student_service == "Local") {
-                        try {
-                            $check = Subscription::where('email', '=', $user->email)->first();
-                            if (empty($check)) {
-                                $subscribe = new Subscription();
-                                $subscribe->email = $user->email;
-                                $subscribe->type = 'Student';
-                                $subscribe->save();
-                            } else {
-                                $check->type = "Student";
-                                $check->save();
-                            }
-                        } catch (\Exception $e) {
-                        }
-                    }
-                }
-            }
 
             send_email($user, 'New_Student_Reg', [
                 'time' => Carbon::now()->format('d-M-Y ,s:i A'),
@@ -312,12 +208,7 @@ class StudentSettingController extends Controller
         $rules = [
             'name' => 'required',
             'email' => 'required|email|unique:users,email,' . $request->id,
-            'password' => ['bail', 'nullable', 'min:8', 'regex:/[a-z]/', 'regex:/[A-Z]/', 'regex:/[@$!%*#?&]/', 'confirmed'],
-            'dob' => 'required',
-            'citizenship' => 'required',
-            'race' => 'required',
-            'gender' => 'required',
-            'identification_number' => ['min:12', 'max:12']
+            'password' => ['bail', 'nullable', 'min:8', 'regex:/[a-z]/', 'regex:/[A-Z]/', 'regex:/[@$!%*#?&]/', 'confirmed']
 
         ];
         $this->validate($request, $rules, validationMessage($rules));
@@ -362,12 +253,6 @@ class StudentSettingController extends Controller
                 $user->linkedin = $request->linkedin;
                 $user->youtube = $request->youtube;
                 $user->about = $request->about;
-                if (isModuleActive('Org')) {
-                    $user->org_position_code = $request->position;
-                    // $user->org_chart_code = $request->branch;
-                    $user->start_working_date = $request->start_working_date;
-                    $user->employee_id = $request->employee_id;
-                }
                 $user->email_verify = 1;
                 $user->gender = $request->gender;
                 if ($request->password) {

@@ -2,10 +2,9 @@
 
 namespace App\Http;
 
-use App\Http\Middleware\CheckUserActiveStatus;
-use App\Http\Middleware\HttpsProtocol;
-use App\Http\Middleware\IpCheck;
-use App\Http\Middleware\LastActivityMiddleware;
+// use App\Http\Middleware\CheckUserActiveStatus;
+// use App\Http\Middleware\IpCheck;
+// use App\Http\Middleware\LastActivityMiddleware;
 use App\Http\Middleware\SetLocale;
 
 //use App\Http\Middleware\XAuthorizationHeader;
@@ -47,11 +46,11 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Modules\Localization\Http\Middleware\Language::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            SetLocale::class,
-            CheckUserActiveStatus::class,
-            XSS::class,
-            IpCheck::class,
-            LastActivityMiddleware::class
+            SetLocale::class
+            // CheckUserActiveStatus::class,
+            // XSS::class,
+            // IpCheck::class,
+            // LastActivityMiddleware::class
         ],
 
         'api' => [

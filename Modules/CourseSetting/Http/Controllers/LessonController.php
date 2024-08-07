@@ -57,7 +57,7 @@ class LessonController extends Controller
             'chapter_id' => 'required',
             'duration' => 'required',
             'course_id' => 'required',
-            'video_url' => 'required',
+            // 'video_url' => 'required',
         ]);
 
         try {

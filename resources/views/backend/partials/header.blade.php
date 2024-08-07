@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="{{ getCourseImage(Settings('favicon')) }}" type="image/png" />
     <title>
-        {{ Settings('site_title') ? Settings('site_title') : 'e-Latih LMS' }}
+        {{ Settings('site_title') ? Settings('site_title') : 'Vedic Civil LMS' }}
     </title>
     <meta name="_token" content="{!! csrf_token() !!}" />
 

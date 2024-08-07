@@ -49,64 +49,6 @@ class AppServiceProvider extends ServiceProvider
         ]);
 
         try {
-            if (isModuleActive('Chat')) {
-                $datatable = DB::connection()->getDatabaseName();
-                if ($datatable) {
-                    if (Schema::hasTable('chat_notifications')) {
-                        view()->composer([
-                            'backend.partials.menu',
-                            theme('partials._dashboard_master'),
-                            theme('partials._dashboard_menu'),
-                            theme('pages.fullscreen_video'),
-                        ], function ($view) {
-                            $notifications = DB::table('chat_notifications')->where('notifiable_id', auth()->id())
-                                ->where('read_at', null)
-                                ->get();
-
-                            foreach ($notifications as $notification) {
-                                $notification->data = json_decode($notification->data);
-                            }
-                            $notifications = $notifications->sortByDesc('created_at');
-
-                            $view->with(['notifications_for_chat' => $notifications]);
-                        });
-                    }
-
-                    view()->composer('*', function ($view) {
-
-                        $seed = session()->get('user_status_seedable');
-                        if (isModuleActive('Chat') && auth()->check() && is_null($seed)) {
-                            $users = User::all();
-                            foreach ($users as $user) {
-                                if (Schema::hasTable('chat_statuses')) {
-                                    Status::firstOrCreate([
-                                        'user_id' => $user->id,
-                                    ], [
-                                        'user_id' => $user->id,
-                                        'status' => 0
-                                    ]);
-                                }
-
-                            }
-
-                            session()->put('user_status_seedable', 'false');
-                        }
-                    });
-
-                    view()->composer('*', function ($view) {
-                        if (auth()->check()) {
-                            $this->app->singleton('extend_view', function ($app) {
-                                if (auth()->user()->role_id == 3) {
-                                    return theme('layouts.dashboard_master');
-                                } else {
-                                    return 'backend.master';
-                                }
-                            });
-                        }
-                    });
-
-                }
-            }
 
             if (Settings('frontend_active_theme')) {
                 $this->app->singleton('topbarSetting', function () {

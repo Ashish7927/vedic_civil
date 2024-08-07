@@ -146,11 +146,11 @@
                     success: function (data) {
                         if (data == 1) {
                             toastr.success("Operation Done Successfully", 'Success');
-                            location.reload();
+                            // location.reload();
 
                         } else if (data == 2) {
                             toastr.success("For demo version,Update only time zone & currency ", 'Success');
-                            location.reload();
+                            // location.reload();
 
                         } else {
                             toastr.error(

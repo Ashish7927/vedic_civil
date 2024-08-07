@@ -76,11 +76,6 @@
                                             </span>
                                 @endif
                             </div>
-                            @if(isModuleActive('Org'))
-
-                                @include('coursesetting::parts_of_course_details._org_host_select')
-
-                            @endif
 
                             <div class="defaultHost {{isModuleActive('Org')?'d-none':''}}">
 
@@ -396,20 +391,12 @@
 
 @push('js')
     <script>
-        var scorm_vendor_type = $('#scorm_vendor_type');
+
         var host_e = $('.host_select').val();
-        scorm_vendor_type.hide();
-        if (host_e == 'SCORM') {
-            scorm_vendor_type.show();
-        }
 
         $('.host_select').on('change', function () {
             var host_e = $('.host_select').val();
             console.log(host_e)
-            scorm_vendor_type.hide();
-            if (host_e == 'SCORM') {
-                scorm_vendor_type.show();
-            }
         });
 
     </script>

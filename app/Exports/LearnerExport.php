@@ -45,20 +45,6 @@ class LearnerExport implements FromCollection, WithHeadings, WithMapping, WithSt
             'Phone',
             'Courses',
             'Created At',
-            // 'Status',
-            'Citizenship',
-            'NRIC Number',
-            'Job Designation',
-            'Sector',
-            'Not Working status',
-            'Business Nature',
-            'Business Nature Others',
-            'Postcode',
-            'Gender',
-            'Date of Birth',
-            'Nationality',
-            'Race',
-            'Employment Status',
             'Highest Academic',
             'Current Residing',
         ];
@@ -87,20 +73,6 @@ class LearnerExport implements FromCollection, WithHeadings, WithMapping, WithSt
             $row->phone,
             $row->enrollCourse->count(),
             showDate($row->created_at),
-            // $row->status == 1 ? "checked" : "",
-            $row->citizenship,
-            $row->identification_number,
-            $row->job_designation,
-            $row->sector,
-            $row->not_working,
-            $row->business_nature,
-            $row->business_nature_other,
-            $row->zip,
-            ucfirst($row->gender),
-            showDate($row->dob),
-            $country_name,
-            $row->race .' '. $row->race_other,
-            $row->employment_status,
             $row->highest_academic,
             $row->current_residing,
         ];
@@ -135,45 +107,6 @@ class LearnerExport implements FromCollection, WithHeadings, WithMapping, WithSt
         }
         if($this->end_date != ''){
             $user->whereDate('created_at', '<=', $this->end_date);
-        }
-        if($this->country != ''){
-            $user->where('country',$this->country);
-        }
-        if($this->citizenship != ''){
-            $user->where('citizenship',$this->citizenship);
-        }
-        if($this->identification_number != ''){
-            $user->where('identification_number', 'like', '%' . $this->identification_number . '%');
-        }
-        if($this->job_designation != ''){
-            $user->where('job_designation',$this->job_designation)->where('employment_status', 'working');
-        }
-        if($this->sector != ''){
-            $user->where('sector',$this->sector)->where('employment_status', 'working');
-        }
-        if($this->not_working != ''){
-            $user->where('not_working',$this->not_working)->where('employment_status', 'not-working');
-        }
-        if($this->business_nature != ''){
-            $user->where('business_nature',$this->business_nature)->where('employment_status', 'self-employed');
-        }
-        if($this->business_nature_other != ''){
-            $user->where('business_nature_other', 'like', '%' . $this->business_nature_other . '%');
-        }
-        if($this->zip != ''){
-            $user->where('zip', 'like', '%' . $this->zip . '%');
-        }
-        if($this->gender != ''){
-            $user->where('gender',$this->gender);
-        }
-        if($this->dob != ''){
-            $user->where('dob', 'like', '%' . date('m/d/Y', strtotime($this->dob)) . '%');
-        }
-        if($this->race != ''){
-            $user->where('race',$this->race);
-        }
-        if($this->employment_status != ''){
-            $user->where('employment_status',$this->employment_status);
         }
         if($this->highest_academic != ''){
             $user->where('highest_academic',$this->highest_academic);

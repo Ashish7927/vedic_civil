@@ -873,13 +873,13 @@ class CourseSettingController extends Controller
                 // 'type' => 'required',
                 'language' => 'required',
                 'title' => 'required',
-                'outcomes' => 'required',
+                // 'outcomes' => 'required',
                 'image' => 'nullable|mimes:jpeg,bmp,png,jpg|max:5120',
-                'requirements' => 'required',
+                // 'requirements' => 'required',
                 'about' => 'required'
             ];
             $rules['course_type'] = 'required|not_in:0';
-            $rules['trainer'] = 'required';
+            // $rules['trainer'] = 'required';
         }
         if ($request->status_code == 0) {
             $rules = [];

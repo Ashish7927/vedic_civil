@@ -228,20 +228,6 @@
                         </div>
 
 
-                        <div class="col-xl-6">
-                            <div class="primary_input mb-25">
-                                <label class="primary_input_label"
-                                       for="currency_conversion">{{ __('setting.Currency Conversion') }}</label>
-                                <select class="primary_select mb-25" name="currency_conversion"
-                                        id="currency_conversion">
-                                    <option value="Fixer"
-                                            @if (Settings('currency_conversion') == 'Fixer') selected @endif>Fixer
-                                    </option>
-
-
-                                </select>
-                            </div>
-                        </div>
 
 
                         <div class="col-xl-6">
@@ -283,14 +269,6 @@
                             </div>
                         </div>
 
-                        <div class="col-xl-6">
-                            <div class="primary_input mb-25">
-                                <label class="primary_input_label"
-                                       for="google_analytics">{{__('setting.Google Analytics')}} <small>(example:G-5S6YDGEDS3/UA-198163311-1)</small></label>
-                                <input class="primary_input_field" placeholder="-" type="text" id="google_analytics"
-                                       name="google_analytics" value="{{ Settings('google_analytics') }}">
-                            </div>
-                        </div>
 
                         <div class="col-xl-6">
                             <div class="primary_input mb-25">
@@ -345,23 +323,6 @@
                         </div>
 
 
-                        <div class="col-xl-6">
-                            <div class="primary_input mb-25">
-                                <label class="primary_input_label"
-                                       for="show_cart">{{__('setting.Show Cart  In Frontend')}}  </label>
-                                <select class="primary_select mb-25" name="show_cart"
-                                        id="show_cart">
-                                    <option value="1"
-                                            @if (Settings('show_cart') == 1) selected @endif>Show
-                                    </option>
-
-                                    <option value="0"
-                                            @if (Settings('show_cart') == 0) selected @endif>Hide
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-
 
                         <div class="col-xl-6">
                             <div class="primary_input mb-25">
@@ -380,70 +341,6 @@
                             </div>
                         </div>
 
-                        <div class="col-xl-6">
-                            <div class="primary_input mb-25">
-                                <label class="primary_input_label"
-                                       for="facebook_pixel">{{__('setting.Facebook Pixel ID')}}  </label>
-                                <input class="primary_input_field" placeholder="-" type="text" id="facebook_pixel"
-                                       name="facebook_pixel" value="{{ Settings('facebook_pixel') }}">
-                            </div>
-                        </div>
-
-
-                        <div class="col-xl-6">
-                            <div class="primary_input mb-25">
-                                <label class="primary_input_label"
-                                       for="student_dashboard_card_view">{{__('setting.Student Dashboard Info In Card View')}}  </label>
-                                <select class="primary_select mb-25" name="student_dashboard_card_view"
-                                        id="student_dashboard_card_view">
-                                    <option value="1"
-                                            @if (Settings('student_dashboard_card_view') == 1) selected @endif> Yes
-                                    </option>
-
-                                    <option value="0"
-                                            @if (Settings('student_dashboard_card_view') == 0) selected @endif> No
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-6">
-                            <div class="primary_input mb-25">
-                                <label class="primary_input_label"
-                                       for="show_seek_bar">{{__('setting.Show SeekBar In Player')}}  </label>
-                                <select class="primary_select mb-25" name="show_seek_bar"
-                                        id="show_seek_bar">
-
-                                    <option value="0"
-                                            @if (Settings('show_seek_bar') == 0) selected @endif> No
-                                    </option>
-                                    <option value="1"
-                                            @if (Settings('show_seek_bar') == 1) selected @endif> Yes
-                                    </option>
-
-                                </select>
-                            </div>
-                        </div>
-                        @if(isModuleActive('Survey'))
-                            <div class="col-xl-6">
-                                <div class="primary_input mb-25">
-                                    <label class="primary_input_label"
-                                           for="must_survey_before_certificate">{{__('setting.Must Survey Before Get Certificate')}}
-                                        ({{__('common.Course')}})  </label>
-                                    <select class="primary_select mb-25" name="must_survey_before_certificate"
-                                            id="must_survey_before_certificate">
-
-                                        <option value="0"
-                                                @if (Settings('must_survey_before_certificate') == 0) selected @endif> No
-                                        </option>
-                                        <option value="1"
-                                                @if (Settings('must_survey_before_certificate') == 1) selected @endif> Yes
-                                        </option>
-
-                                    </select>
-                                </div>
-                            </div>
-                        @endif
                         <div class="col-xl-12">
                             <div class="primary_input mb-25">
                                 <label class="primary_input_label"
